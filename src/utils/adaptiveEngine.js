@@ -1,4 +1,10 @@
-export const T0 = 15; // seconds threshold for fast/slow
+// Per-difficulty average response time thresholds (seconds).
+// Promotion to the next level only happens if avg response time <= threshold.
+export const TIME_THRESHOLDS = {
+  easy:   20,
+  medium: 30,
+  hard:   45,
+};
 
 export const difficultyMarks = {
   easy: 2,
@@ -6,8 +12,8 @@ export const difficultyMarks = {
   hard: 5,
 };
 
-// Minimum questions correctly solved before difficulty can increase
-// (and minimum required to allow assessment to end)
+// Minimum correct answers at a difficulty before speed is evaluated
+// and before difficulty can increase.
 export const THRESHOLDS = {
   easy: 3,
   medium: 2,
@@ -15,39 +21,34 @@ export const THRESHOLDS = {
 };
 
 /**
- * Evaluates an answer and returns marks earned and next-difficulty action.
- * attempt: 1 = first attempt, 2 = second attempt (after one incorrect)
+ * Evaluates an answer and returns marks earned and a pending action hint.
+ *
+ * Returns action = "candidate" when correct on attempt 1 with no hint —
+ * caller must call shouldIncreaseDifficulty() to resolve to "increase" or "same".
  */
-export function evaluateAnswer({ isCorrect, responseTime, hintUsed, attempt, difficulty }) {
+export function evaluateAnswer({ isCorrect, hintUsed, attempt, difficulty }) {
   const fullMarks = difficultyMarks[difficulty];
-  const isFast = responseTime <= T0;
 
   let marks = 0;
   let action = "same";
 
   if (attempt === 1) {
     if (isCorrect) {
-      if (isFast && !hintUsed) {
-        // Case 1: correct, fast, no hint -> full marks, increase difficulty
+      if (!hintUsed) {
+        // Correct, no hint → candidate for promotion; speed check done in caller
         marks = fullMarks;
-        action = "increase";
-      } else if (isFast && hintUsed) {
-        // Case 2: correct, fast, with hint -> half marks, same difficulty
-        marks = 0.5 * fullMarks;
-        action = "same";
+        action = "candidate";
       } else {
-        // Case 3: correct, slow -> full if no hint, half if hint
-        marks = hintUsed ? 0.5 * fullMarks : fullMarks;
+        // Correct but used hint → half marks, never promote
+        marks = 0.5 * fullMarks;
         action = "same";
       }
     }
-    // incorrect attempt 1 -> marks = 0, will retry (no action yet)
+    // incorrect attempt 1 → marks = 0, will retry
   } else if (attempt === 2) {
     if (isCorrect) {
-      // Case 3.1: correct on retry
       marks = hintUsed ? 0.3 * fullMarks : 0.5 * fullMarks;
     } else {
-      // Case 3.2: incorrect on retry -> 0 marks
       marks = 0;
     }
     action = "same";
@@ -57,8 +58,35 @@ export function evaluateAnswer({ isCorrect, responseTime, hintUsed, attempt, dif
 }
 
 /**
- * Returns a misconception key (string) that has hit threshold (>=3),
- * ignoring key "0". Returns null if none triggered.
+ * Decides whether to promote after a "candidate" answer.
+ *
+ * Rules:
+ *  1. Threshold must be met (solved count >= THRESHOLDS[difficulty]) — evaluated
+ *     AFTER incrementing num_*_solved for the current question.
+ *  2. Only then: compute average response time across all correct-attempt-1
+ *     answers at this difficulty (responseTimes includes the current one).
+ *     avg <= TIME_THRESHOLDS[difficulty]  → "increase"
+ *     avg >  TIME_THRESHOLDS[difficulty]  → "same"
+ *  3. Before threshold: always "same" — not enough data to judge speed yet.
+ */
+export function shouldIncreaseDifficulty(difficulty, stats, responseTimes) {
+  const solved = {
+    easy:   stats.num_easy_solved,
+    medium: stats.num_med_solved,
+    hard:   stats.num_hard_solved,
+  };
+
+  if (solved[difficulty] < THRESHOLDS[difficulty]) return "same";
+
+  if (responseTimes.length === 0) return "same";
+  const avg = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+
+  return avg <= TIME_THRESHOLDS[difficulty] ? "increase" : "same";
+}
+
+/**
+ * Returns a misconception key that has hit threshold (>=3), ignoring key "0".
+ * Returns null if none triggered.
  */
 export function checkRemedial(mis) {
   for (const k in mis) {
@@ -68,47 +96,24 @@ export function checkRemedial(mis) {
 }
 
 /**
- * Determines next difficulty level.
- *
- * - "increase" action: advance only if current threshold is met.
- *   If NOT met, stay on current difficulty.
- * - "same" action: stay on current difficulty.
- *
- * Returns: next difficulty string OR "end".
+ * Determines next difficulty level given a resolved action.
+ * "increase" → advance | "same" → stay
+ * Returns next difficulty string OR "end".
  */
-export function nextDifficulty(current, action, stats) {
-  const solved = {
-    easy:   stats.num_easy_solved,
-    medium: stats.num_med_solved,
-    hard:   stats.num_hard_solved,
-  };
-
+export function nextDifficulty(current, action) {
   if (action === "increase") {
-    if (solved[current] >= THRESHOLDS[current]) {
-      if (current === "easy")   return "medium";
-      if (current === "medium") return "hard";
-      if (current === "hard")   return "end";
-    }
-    // Threshold NOT met — stay on current difficulty
-    return current;
+    if (current === "easy")   return "medium";
+    if (current === "medium") return "hard";
+    if (current === "hard")   return "end";
   }
-
-  // action === "same"
   return current;
 }
 
 /**
- * Called when pickQuestion returns null (pool for current difficulty exhausted).
- *
- * Rules:
- *  - If threshold for current IS met  -> advance to next level (or "end" if hard).
- *  - If threshold NOT met             -> force-advance to next level anyway
- *    (prevents premature end due to insufficient question data).
- *    If already at hard               -> return "end" (nothing left to do).
+ * Force-advance when question pool is exhausted.
  */
-export function handlePoolExhausted(current, stats) {
+export function handlePoolExhausted(current) {
   if (current === "easy")   return "medium";
   if (current === "medium") return "hard";
-  // hard pool exhausted
   return "end";
 }

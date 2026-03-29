@@ -235,13 +235,18 @@ export default function App() {
   }
 
   function handleStartAssessment() {
+    localStorage.removeItem(`session_${student.studentId}_${activeSubtopic}`);
+
     const sessionId = generateSessionId(student.studentId);
+
     const sd = createSessionData({
       studentId: student.studentId,
       sessionId,
-      subtopicIndex: activeSubtopic,
+      subtopicIndex: activeSubtopic
     });
+
     setSessionData(sd);
+    setScreen(SCREENS.ASSESSMENT);
     setScreen(SCREENS.ASSESSMENT);
   }
 

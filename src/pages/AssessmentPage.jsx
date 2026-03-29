@@ -1,3 +1,531 @@
+
+
+// import { useState, useRef, useCallback, useEffect } from "react";
+// import { difficultyMarks, evaluateAnswer, nextDifficulty, checkRemedial } from "../utils/adaptiveEngine";
+// import { misconceptionsContent } from "../data/misconceptions";
+// import { useMetrics } from "../utils/useMetrics";
+// import { loadProgress, saveProgress } from "../utils/progressManager";
+
+// // ── Live Question Timer Hook ──────────────────────────────────────────────────
+// function useQuestionTimer(active) {
+//   const [elapsed, setElapsed] = useState(0);
+//   const intervalRef = useRef(null);
+
+//   function reset() {
+//     setElapsed(0);
+//   }
+
+//   useEffect(() => {
+//     if (active) {
+//       intervalRef.current = setInterval(() => setElapsed(s => s + 1), 1000);
+//     } else {
+//       clearInterval(intervalRef.current);
+//     }
+//     return () => clearInterval(intervalRef.current);
+//   }, [active]);
+
+//   const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
+//   const secs = String(elapsed % 60).padStart(2, "0");
+//   return { elapsed, display: `${mins}:${secs}`, reset };
+// }
+
+// import QuestionCard from "../components/QuestionCard";
+// import HintBox from "../components/HintBox";
+// import FeedbackBox from "../components/FeedbackBox";
+// import RemedialContent from "../components/RemedialContent";
+// import ExitGuard from "../components/ExitGuard";
+
+// import q1 from "../data/questions1.json";
+// import q2 from "../data/questions2.json";
+// import q3 from "../data/questions3.json";
+// import q4 from "../data/questions4.json";
+// import q5 from "../data/questions5.json";
+
+// const ALL_QUESTIONS = { 1: q1, 2: q2, 3: q3, 4: q4, 5: q5 };
+
+// function buildPool(idx) {
+//   const qs = ALL_QUESTIONS[idx] || [];
+//   return {
+//     easy: qs.filter(q => q.difficulty === "easy"),
+//     medium: qs.filter(q => q.difficulty === "medium"),
+//     hard: qs.filter(q => q.difficulty === "hard"),
+//   };
+// }
+
+// function pickQuestion(pool, difficulty, usedIds) {
+//   const remaining = pool[difficulty].filter(q => !usedIds.has(q.id));
+//   if (remaining.length === 0) return null;
+//   return remaining[Math.floor(Math.random() * remaining.length)];
+// }
+
+// const INIT_STATS = {
+//   num_easy_solved: 0, num_med_solved: 0, num_hard_solved: 0,
+//   marks_gained: 0, marks_total: 0, attempted: 0,
+// };
+
+// export default function AssessmentPage({ subtopicIndex, sessionData, onComplete, onExit }) {
+//   const pool = useRef(buildPool(subtopicIndex));
+
+//   // const [difficulty, setDifficulty] = useState("easy");
+//   const usedIds = useRef(new Set());
+
+//   useEffect(() => {
+//     if (shouldResume) {
+//       usedIds.current = new Set(saved.usedIds);
+//     }
+//   }, []);
+//   const startTimeRef = useRef(Date.now());
+//   const pendingAction = useRef("same");
+
+//   const saved = JSON.parse(localStorage.getItem("its_resume"));
+//   const progress = loadProgress(sessionData.student_id);
+
+//   const shouldResume =
+//     saved &&
+//     saved.subtopicIndex === subtopicIndex &&
+//     !progress.subtopics[subtopicIndex]?.attempted;
+//   // 🔥 LOAD DIFFICULTY
+//   const [difficulty, setDifficulty] = useState(() => {
+//     if (shouldResume) {
+//       return saved.difficulty;
+//     }
+//     return "easy";
+//   });
+
+//   const [current, setCurrent] = useState(() => {
+//     if (shouldResume) {
+//       return saved.currentQuestion;
+//     }
+
+//     const q = pickQuestion(pool.current, "easy", usedIds.current);
+//     if (q) usedIds.current.add(q.id);
+//     return q;
+//   });
+
+//   const [stats, setStats] = useState(INIT_STATS);
+//   const statsRef = useRef(INIT_STATS);
+//   useEffect(() => {
+//     if (shouldResume) {
+//       statsRef.current = saved.stats;
+//       setStats(saved.stats);
+//     }
+//   }, []);
+//   function updateStats(updater) {
+//     setStats(prev => { const next = updater(prev); statsRef.current = next; return next; });
+//   }
+
+//   const [attempt, setAttempt] = useState(1);
+//   const [hintUsed, setHintUsed] = useState(false);
+//   const [selectedKey, setSelectedKey] = useState(null);
+//   const [feedback, setFeedback] = useState("");
+//   const [showSolution, setShowSolution] = useState(false);
+//   const [phase, setPhase] = useState("answering");
+
+//   // ── Timer state ────────────────────────────────────────────────────────────
+//   const [timerActive, setTimerActive] = useState(true);
+//   const totalTimeRef = useRef(0); // cumulative seconds across all questions
+//   const { elapsed, display: timerDisplay, reset: resetTimer } = useQuestionTimer(timerActive);
+
+//   const [mis, setMis] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 });
+//   const misRef = useRef({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 });
+//   function updateMis(key) {
+//     setMis(prev => { const next = { ...prev, [key]: prev[key] + 1 }; misRef.current = next; return next; });
+//   }
+
+//   const { metrics, metricsRef, recordCorrect, recordWrong, recordRetry, recordHintUsed } = useMetrics();
+//   useEffect(() => {
+//     if (shouldResume) {
+//       metricsRef.current = saved.metrics;
+//     }
+//   }, []);
+
+//   const [remedialKey, setRemedialKey] = useState(null);
+//   const [assessmentDone, setAssessmentDone] = useState(false);
+//   const [exitGuardActive, setExitGuardActive] = useState(true);
+
+//   // const loadNextQuestion = useCallback((diff) => {
+//   //   const q = pickQuestion(pool.current, diff, usedIds.current);
+//   //   if (!q) {
+//   //     const nextDiff = diff === "easy"
+//   //       ? "medium"
+//   //       : diff === "medium"
+//   //         ? "hard"
+//   //         : "end";
+
+//   //     if (nextDiff === "end") {
+//   //       finishAssessment();
+//   //     } else {
+//   //       loadNextQuestion(nextDiff);
+//   //     }
+//   //     return;
+//   //   }
+//   //   usedIds.current.add(q.id);
+//   //   setCurrent(q);
+//   //   setDifficulty(diff);
+//   //   startTimeRef.current = Date.now();
+//   //   setAttempt(1); setHintUsed(false); setSelectedKey(null);
+//   //   setFeedback(""); setShowSolution(false); setPhase("answering");
+//   // }, []); // eslint-disable-line
+//   const loadNextQuestion = useCallback((diff) => {
+//     const q = pickQuestion(pool.current, diff, usedIds.current);
+
+//     if (!q) {
+//       // try next difficulty ONCE
+//       if (diff === "easy") return loadNextQuestion("medium");
+//       if (diff === "medium") return loadNextQuestion("hard");
+
+//       // hard exhausted → END
+//       finishAssessment();
+//       return;
+//     }
+
+//     usedIds.current.add(q.id);
+//     setCurrent(q);
+//     setDifficulty(diff);
+//     startTimeRef.current = Date.now();
+
+//     setAttempt(1);
+//     setHintUsed(false);
+//     setSelectedKey(null);
+//     setFeedback("");
+//     setShowSolution(false);
+//     setPhase("answering");
+
+//     // ── Reset question timer ──────────────────────────────────────────────
+//     setTimerActive(true);
+//     resetTimer();
+
+//   }, []);
+
+//   function finishAssessment() {
+//     setExitGuardActive(false);
+//     setAssessmentDone(true);
+
+//     const studentId = sessionData.student_id;
+
+//     // 🧮 calculate score
+//     const score = statsRef.current.marks_total > 0
+//       ? (statsRef.current.marks_gained / statsRef.current.marks_total) * 100
+//       : 0;
+
+//     const passed = score >= 35; // ✅ PASS CRITERIA
+
+//     // 🕒 ✅ CALCULATE TOTAL TIME SPENT
+//     const timeSpentSeconds = Math.round(
+//       (Date.now() - new Date(sessionData.start_time).getTime()) / 1000
+//     );
+
+//     // 📊 load existing progress
+//     const progress = loadProgress(studentId);
+
+//     // 🔥 FULL METRICS OBJECT (UPDATED)
+//     const fullMetrics = {
+//       correct_answers: metricsRef.current.correct_answers,
+//       wrong_answers: metricsRef.current.wrong_answers,
+//       questions_attempted: metricsRef.current.questions_attempted,
+//       retry_count: metricsRef.current.retry_count,
+//       hints_used: metricsRef.current.hints_used,
+//       marks_gained: statsRef.current.marks_gained,
+//       marks_total: statsRef.current.marks_total,
+
+//       // ✅ ADD TIME HERE
+//       time_spent_seconds: timeSpentSeconds,
+//     };
+
+//     // ✅ SAVE SUBTOPIC DATA
+//     progress.subtopics[subtopicIndex] = {
+//       score,
+//       completed: passed,
+//       attempted: true,   // 🔥 controls resume logic
+//       metrics: fullMetrics,
+//     };
+
+//     // 📈 calculate overall score
+//     const scores = Object.values(progress.subtopics).map(s => s.score || 0);
+//     progress.overallScore = scores.reduce((a, b) => a + b, 0) / 5;
+
+//     // 💾 save progress
+//     saveProgress(studentId, progress);
+
+//     // 🚨 CLEAR RESUME STATE (important for reattempt)
+//     localStorage.removeItem("its_resume");
+//     localStorage.removeItem(`session_${studentId}_${subtopicIndex}`);
+
+//     // 🎯 OPTIONAL: show feedback for failure
+//     if (!passed) {
+//       alert("⚠️ You scored below 35%. Please reattempt to unlock the next subtopic.");
+//     }
+
+//     // 🚀 send data to Result Page
+//     onComplete({
+//       ...fullMetrics,
+//       score,
+//       passed,
+//     });
+//   }
+//   function handleSelect(opt) {
+//     const isCorrect = opt.is_correct === true;
+//     setSelectedKey(opt.key);
+
+//     // ── Pause timer and accumulate elapsed time ──────────────────────────
+//     setTimerActive(false);
+//     totalTimeRef.current += elapsed;
+
+//     if (!isCorrect) updateMis(opt.misconception_mapped ?? 0);
+
+//     if (attempt === 1) {
+//       const responseTime = (Date.now() - startTimeRef.current) / 1000;
+
+//       if (isCorrect) {
+//         const { marks, action } = evaluateAnswer({
+//           isCorrect: true,
+//           responseTime,
+//           hintUsed,
+//           attempt: 1,
+//           difficulty,
+//         });
+
+//         pendingAction.current = action;
+
+//         updateStats(prev => {
+//           const u = { ...prev };
+//           u.marks_gained += marks;
+//           u.marks_total += difficultyMarks[difficulty];
+//           u.attempted += 1;
+
+//           if (difficulty === "easy") u.num_easy_solved += 1;
+//           if (difficulty === "medium") u.num_med_solved += 1;
+//           if (difficulty === "hard") u.num_hard_solved += 1;
+
+//           return u;
+//         });
+
+//         recordCorrect();
+//         setFeedback(opt.feedback);
+//         setPhase("next");
+
+//       } else {
+//         // ❌ DO NOT REMOVE SELECTED KEY (fix UI bug)
+//         // setSelectedKey(null); ❌ remove this line
+
+//         setFeedback(opt.feedback);
+//         setAttempt(2);
+//         setPhase("retry");
+//         recordRetry();
+//       }
+
+//     } else {
+//       pendingAction.current = "same";
+
+//       if (isCorrect) {
+//         const { marks } = evaluateAnswer({
+//           isCorrect: true,
+//           responseTime: 0,
+//           hintUsed,
+//           attempt: 2,
+//           difficulty,
+//         });
+
+//         updateStats(prev => {
+//           const u = { ...prev };
+//           u.marks_gained += marks;
+//           u.marks_total += difficultyMarks[difficulty];
+//           u.attempted += 1;
+
+//           if (difficulty === "easy") u.num_easy_solved += 1;
+//           if (difficulty === "medium") u.num_med_solved += 1;
+//           if (difficulty === "hard") u.num_hard_solved += 1;
+
+//           return u;
+//         });
+
+//         recordCorrect();
+//         setFeedback(opt.feedback);
+//         setPhase("next");
+
+//       } else {
+//         updateStats(prev => ({
+//           ...prev,
+//           marks_total: prev.marks_total + difficultyMarks[difficulty],
+//           attempted: prev.attempted + 1,
+//         }));
+
+//         recordWrong();
+//         setFeedback(opt.feedback);
+//         setShowSolution(true);
+//         setPhase("solution");
+//       }
+//     }
+
+//     // 🧠 🔥 SAVE RESUME STATE (VERY IMPORTANT)
+//     localStorage.setItem(
+//       "its_resume",
+//       JSON.stringify({
+//         subtopicIndex,
+//         currentQuestion: current,
+//         difficulty,
+//         stats: statsRef.current,
+//         metrics: metricsRef.current,
+//         usedIds: Array.from(usedIds.current),
+//       })
+//     );
+//   }
+//   function handleHintUse() {
+//     if (!hintUsed) { setHintUsed(true); recordHintUsed(); }
+//   }
+
+//   function proceedToNext() {
+//     const remKey = checkRemedial(misRef.current);
+//     if (remKey) {
+//       setMis(prev => { const n = { ...prev, [remKey]: 0 }; misRef.current = n; return n; });
+//       setRemedialKey(remKey);
+//       return;
+//     }
+//     const nextDiff = nextDifficulty(difficulty, pendingAction.current, statsRef.current);
+//     if (nextDiff === "end") { finishAssessment(); return; }
+//     loadNextQuestion(nextDiff);
+//     localStorage.setItem(
+//       "its_resume",
+//       JSON.stringify({
+//         subtopicIndex,
+//         currentQuestion: current,
+//         difficulty,
+//         stats: statsRef.current,
+//         metrics: metricsRef.current,
+//         usedIds: Array.from(usedIds.current),
+//       })
+//     );
+//   }
+
+//   function handleNext() { proceedToNext(); }
+//   function handleRemedialContinue() { setRemedialKey(null); proceedToNext(); }
+
+//   // ── Done screen (brief — App navigates away after dispatch) ──────────────
+//   if (assessmentDone) {
+//     const score = stats.marks_total > 0
+//       ? ((stats.marks_gained / stats.marks_total) * 100).toFixed(1) : "0.0";
+//     return (
+//       <div className="p-6 max-w-2xl mx-auto text-center mt-10 space-y-4">
+//         <h1 className="text-3xl font-bold text-green-700">Subtopic {subtopicIndex} Complete! 🎉</h1>
+//         <div className="bg-white rounded-2xl shadow-lg p-6 space-y-3">
+//           <p className="text-lg">Questions Attempted: <strong>{stats.attempted}</strong></p>
+//           <p className="text-lg">Marks Gained: <strong>{stats.marks_gained.toFixed(1)}</strong></p>
+//           <p className="text-lg">Total Marks: <strong>{stats.marks_total}</strong></p>
+//           <p className="text-2xl font-bold text-blue-600">Score: {score}%</p>
+//           <p className="text-sm text-gray-500">
+//             Correct: {metrics.correct_answers} | Wrong: {metrics.wrong_answers} |
+//             Retries: {metrics.retry_count} | Hints: {metrics.hints_used}
+//           </p>
+//           <p className="text-xs text-gray-400 animate-pulse">Saving your session...</p>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   if (remedialKey) {
+//     return (
+//       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-100 py-10">
+//         <div className="max-w-3xl mx-auto px-6 space-y-6">
+//           <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-orange-200 text-center">
+//             <h1 className="text-3xl font-extrabold text-orange-700">⚠️ Let's Fix This Concept</h1>
+//             <p className="text-gray-600 mt-2">Looks like there's a small misconception — no worries, let's clear it up!</p>
+//           </div>
+//           <div className="bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-blue-100">
+//             <RemedialContent content={misconceptionsContent[remedialKey]} onContinue={handleRemedialContinue} />
+//           </div>
+//           <div className="bg-green-50 border border-green-300 p-4 rounded-2xl text-center">
+//             <p className="text-green-800 font-medium">💡 You're improving! Understanding mistakes is the fastest way to learn.</p>
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   if (!current) return <div className="text-center mt-10 text-gray-500">Loading...</div>;
+
+//   const isAnswered = phase === "next" || phase === "solution";
+
+//   return (
+//     <>
+//       <ExitGuard
+//         active={exitGuardActive}
+//         sessionData={sessionData}
+//         metricsRef={metricsRef}
+//         statsRef={statsRef}          // 🔥 add
+//         current={current}            // 🔥 add
+//         difficulty={difficulty}      // 🔥 add
+//         subtopicIndex={subtopicIndex}// 🔥 add
+//         usedIds={usedIds}            // 🔥 add
+//         onConfirmExit={onExit}
+//       />
+//       <div className="p-6 max-w-2xl mx-auto space-y-4">
+//         <div className="flex justify-between text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
+//           <span>Subtopic <strong>{subtopicIndex}</strong> — <span className="capitalize">{difficulty}</span></span>
+//           <span>Easy: {stats.num_easy_solved} | Med: {stats.num_med_solved} | Hard: {stats.num_hard_solved}</span>
+//           <span>Score: {stats.marks_total > 0 ? ((stats.marks_gained / stats.marks_total) * 100).toFixed(0) : 0}%</span>
+//         </div>
+
+//         {/* ── Question Timer ───────────────────────────────────────────────── */}
+//         <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-mono text-lg font-bold border-2 transition-colors ${timerActive
+//           ? elapsed < 30
+//             ? "bg-green-50 border-green-300 text-green-700"
+//             : elapsed < 60
+//               ? "bg-yellow-50 border-yellow-300 text-yellow-700"
+//               : "bg-red-50 border-red-300 text-red-600 animate-pulse"
+//           : "bg-gray-50 border-gray-200 text-gray-400"
+//           }`}>
+//           <span>{timerActive ? "⏱" : "⏸"}</span>
+//           <span>{timerDisplay}</span>
+//           {timerActive && elapsed >= 60 && (
+//             <span className="text-xs font-normal ml-1">Take your time!</span>
+//           )}
+//         </div>
+
+//         <div className="flex gap-4 text-xs text-gray-400 bg-white border border-gray-100 rounded-xl px-4 py-2">
+//           <span>✅ {metrics.correct_answers}</span>
+//           <span>❌ {metrics.wrong_answers}</span>
+//           <span>🔁 Retries: {metrics.retry_count}</span>
+//           <span>💡 Hints: {metrics.hints_used}</span>
+//         </div>
+
+//         <QuestionCard question={current} onSelect={handleSelect} disabled={isAnswered} selectedKey={selectedKey} />
+
+//         {(phase === "answering" || phase === "retry") && (
+//           <HintBox hint={current.hint} used={hintUsed} onUse={handleHintUse} />
+//         )}
+
+//         {feedback && (
+//           <FeedbackBox
+//             feedback={feedback}
+//             isCorrect={current.options.find(o => o.key === selectedKey)?.is_correct}
+//           />
+//         )}
+
+//         {phase === "retry" && (
+//           <div className="bg-yellow-50 border border-yellow-300 p-4 rounded-xl text-sm text-yellow-800">
+//             ⚠️ That's not quite right. You have one more attempt — choose carefully!
+//           </div>
+//         )}
+
+//         {showSolution && current.full_solution && (
+//           <div className="bg-blue-50 border border-blue-300 p-4 rounded-xl">
+//             <p className="font-semibold text-blue-800 mb-1">Full Solution:</p>
+//             <p className="text-blue-700 text-sm">{current.full_solution}</p>
+//           </div>
+//         )}
+
+//         {isAnswered && (
+//           <button onClick={handleNext}
+//             className="w-full bg-blue-600 text-white py-3 rounded-xl mt-4 hover:bg-blue-700 transition font-semibold">
+//             Next Question →
+//           </button>
+//         )}
+//       </div>
+//     </>
+//   );
+// }
+
+
 /**
  * AssessmentPage.jsx
  * Calls onComplete(metrics) passing live metrics up to App.
@@ -5,7 +533,15 @@
  */
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { difficultyMarks, evaluateAnswer, nextDifficulty, checkRemedial } from "../utils/adaptiveEngine";
+import {
+  difficultyMarks,
+  evaluateAnswer,
+  nextDifficulty,
+  checkRemedial,
+  shouldIncreaseDifficulty,
+  TIME_THRESHOLDS,
+  THRESHOLDS,
+} from "../utils/adaptiveEngine";
 import { misconceptionsContent } from "../data/misconceptions";
 import { useMetrics } from "../utils/useMetrics";
 import { loadProgress, saveProgress } from "../utils/progressManager";
@@ -22,14 +558,54 @@ import q3 from "../data/questions3.json";
 import q4 from "../data/questions4.json";
 import q5 from "../data/questions5.json";
 
+// ── Live Question Timer Hook ──────────────────────────────────────────────────
+function useQuestionTimer(active) {
+  const [elapsed, setElapsed] = useState(0);
+  const intervalRef = useRef(null);
+
+  function reset() {
+    setElapsed(0);
+  }
+
+  useEffect(() => {
+    if (active) {
+      intervalRef.current = setInterval(() => setElapsed(s => s + 1), 1000);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [active]);
+
+  const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
+  const secs = String(elapsed % 60).padStart(2, "0");
+  return { elapsed, display: `${mins}:${secs}`, reset };
+}
+
+/**
+ * Timer bar colour based on elapsed vs the per-difficulty TIME_THRESHOLD.
+ *   < 50 % of threshold → green
+ *   50–100 %            → yellow
+ *   > threshold         → red + pulse
+ * Paused (answered)     → gray
+ */
+function timerColorClasses(elapsed, difficulty, active) {
+  if (!active) return "bg-gray-50 border-gray-200 text-gray-400";
+  const threshold = TIME_THRESHOLDS[difficulty];
+  if (elapsed < threshold * 0.5) return "bg-green-50 border-green-300 text-green-700";
+  if (elapsed < threshold)       return "bg-yellow-50 border-yellow-300 text-yellow-700";
+  return "bg-red-50 border-red-300 text-red-600 animate-pulse";
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 const ALL_QUESTIONS = { 1: q1, 2: q2, 3: q3, 4: q4, 5: q5 };
 
 function buildPool(idx) {
   const qs = ALL_QUESTIONS[idx] || [];
   return {
-    easy: qs.filter(q => q.difficulty === "easy"),
+    easy:   qs.filter(q => q.difficulty === "easy"),
     medium: qs.filter(q => q.difficulty === "medium"),
-    hard: qs.filter(q => q.difficulty === "hard"),
+    hard:   qs.filter(q => q.difficulty === "hard"),
   };
 }
 
@@ -45,33 +621,39 @@ const INIT_STATS = {
 };
 
 export default function AssessmentPage({ subtopicIndex, sessionData, onComplete, onExit }) {
-  const pool = useRef(buildPool(subtopicIndex));
-
-  // const [difficulty, setDifficulty] = useState("easy");
+  const pool    = useRef(buildPool(subtopicIndex));
   const usedIds = useRef(new Set());
 
+  const saved    = JSON.parse(localStorage.getItem("its_resume"));
+  const progress = loadProgress(sessionData.student_id);
+
+  const shouldResume =
+    saved &&
+    saved.subtopicIndex === subtopicIndex &&
+    !progress.subtopics[subtopicIndex]?.attempted;
+
   useEffect(() => {
-    if (saved && saved.subtopicIndex === subtopicIndex) {
+    if (shouldResume) {
       usedIds.current = new Set(saved.usedIds);
     }
-  }, []);
-  const startTimeRef = useRef(Date.now());
+  }, []); // eslint-disable-line
+
+  const startTimeRef  = useRef(Date.now());
   const pendingAction = useRef("same");
 
-  const saved = JSON.parse(localStorage.getItem("its_resume"));
+  // ── Per-difficulty response-time accumulator ──────────────────────────────
+  // Only correct, attempt-1, no-hint answers are recorded here.
+  // shouldIncreaseDifficulty() averages these and compares vs TIME_THRESHOLDS.
+  const responseTimesRef = useRef({ easy: [], medium: [], hard: [] });
+
   // 🔥 LOAD DIFFICULTY
   const [difficulty, setDifficulty] = useState(() => {
-    if (saved && saved.subtopicIndex === subtopicIndex) {
-      return saved.difficulty;
-    }
+    if (shouldResume) return saved.difficulty;
     return "easy";
   });
 
   const [current, setCurrent] = useState(() => {
-    if (saved && saved.subtopicIndex === subtopicIndex) {
-      return saved.currentQuestion;
-    }
-
+    if (shouldResume) return saved.currentQuestion;
     const q = pickQuestion(pool.current, "easy", usedIds.current);
     if (q) usedIds.current.add(q.id);
     return q;
@@ -80,71 +662,60 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
   const [stats, setStats] = useState(INIT_STATS);
   const statsRef = useRef(INIT_STATS);
   useEffect(() => {
-    if (saved && saved.subtopicIndex === subtopicIndex) {
+    if (shouldResume) {
       statsRef.current = saved.stats;
       setStats(saved.stats);
     }
-  }, []);
+  }, []); // eslint-disable-line
+
   function updateStats(updater) {
-    setStats(prev => { const next = updater(prev); statsRef.current = next; return next; });
+    setStats(prev => {
+      const next = updater(prev);
+      statsRef.current = next;
+      return next;
+    });
   }
 
-  const [attempt, setAttempt] = useState(1);
-  const [hintUsed, setHintUsed] = useState(false);
-  const [selectedKey, setSelectedKey] = useState(null);
-  const [feedback, setFeedback] = useState("");
+  const [attempt, setAttempt]           = useState(1);
+  const [hintUsed, setHintUsed]         = useState(false);
+  const [selectedKey, setSelectedKey]   = useState(null);
+  const [feedback, setFeedback]         = useState("");
   const [showSolution, setShowSolution] = useState(false);
-  const [phase, setPhase] = useState("answering");
+  const [phase, setPhase]               = useState("answering");
+
+  // ── Timer state ───────────────────────────────────────────────────────────
+  const [timerActive, setTimerActive] = useState(true);
+  const totalTimeRef = useRef(0); // cumulative seconds across all questions
+  const { elapsed, display: timerDisplay, reset: resetTimer } = useQuestionTimer(timerActive);
 
   const [mis, setMis] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 });
   const misRef = useRef({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 });
   function updateMis(key) {
-    setMis(prev => { const next = { ...prev, [key]: prev[key] + 1 }; misRef.current = next; return next; });
+    setMis(prev => {
+      const next = { ...prev, [key]: prev[key] + 1 };
+      misRef.current = next;
+      return next;
+    });
   }
 
   const { metrics, metricsRef, recordCorrect, recordWrong, recordRetry, recordHintUsed } = useMetrics();
   useEffect(() => {
-    if (saved && saved.subtopicIndex === subtopicIndex) {
+    if (shouldResume) {
       metricsRef.current = saved.metrics;
     }
-  }, []);
+  }, []); // eslint-disable-line
 
-  const [remedialKey, setRemedialKey] = useState(null);
-  const [assessmentDone, setAssessmentDone] = useState(false);
+  const [remedialKey, setRemedialKey]         = useState(null);
+  const [assessmentDone, setAssessmentDone]   = useState(false);
   const [exitGuardActive, setExitGuardActive] = useState(true);
 
-  // const loadNextQuestion = useCallback((diff) => {
-  //   const q = pickQuestion(pool.current, diff, usedIds.current);
-  //   if (!q) {
-  //     const nextDiff = diff === "easy"
-  //       ? "medium"
-  //       : diff === "medium"
-  //         ? "hard"
-  //         : "end";
-
-  //     if (nextDiff === "end") {
-  //       finishAssessment();
-  //     } else {
-  //       loadNextQuestion(nextDiff);
-  //     }
-  //     return;
-  //   }
-  //   usedIds.current.add(q.id);
-  //   setCurrent(q);
-  //   setDifficulty(diff);
-  //   startTimeRef.current = Date.now();
-  //   setAttempt(1); setHintUsed(false); setSelectedKey(null);
-  //   setFeedback(""); setShowSolution(false); setPhase("answering");
-  // }, []); // eslint-disable-line
+  // ── Load next question ────────────────────────────────────────────────────
   const loadNextQuestion = useCallback((diff) => {
     const q = pickQuestion(pool.current, diff, usedIds.current);
 
     if (!q) {
-      // try next difficulty ONCE
-      if (diff === "easy") return loadNextQuestion("medium");
+      if (diff === "easy")   return loadNextQuestion("medium");
       if (diff === "medium") return loadNextQuestion("hard");
-
-      // hard exhausted → END
       finishAssessment();
       return;
     }
@@ -161,64 +732,62 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
     setShowSolution(false);
     setPhase("answering");
 
-  }, []);
-  // ── Finish: disarm guard, pass metrics to App SYNCHRONOUSLY ──────────────
-  // function finishAssessment() {
-  //   setExitGuardActive(false);
-  //   setAssessmentDone(true);
-  //   // Pass the latest metrics snapshot directly — no async, no unmount race
-  //   onComplete(metricsRef.current);
-  // }
+    // Reset and restart question timer
+    setTimerActive(true);
+    resetTimer();
+  }, []); // eslint-disable-line
 
+  // ── Finish assessment ─────────────────────────────────────────────────────
   function finishAssessment() {
     setExitGuardActive(false);
     setAssessmentDone(true);
 
     const studentId = sessionData.student_id;
 
-    // 🧮 calculate score
     const score = statsRef.current.marks_total > 0
       ? (statsRef.current.marks_gained / statsRef.current.marks_total) * 100
       : 0;
 
-    // 📊 load existing progress
+    const passed = score >= 35;
+
     const progress = loadProgress(studentId);
 
-    // 🔥 FULL METRICS OBJECT
     const fullMetrics = {
-      correct_answers: metricsRef.current.correct_answers,
-      wrong_answers: metricsRef.current.wrong_answers,
+      correct_answers:     metricsRef.current.correct_answers,
+      wrong_answers:       metricsRef.current.wrong_answers,
       questions_attempted: metricsRef.current.questions_attempted,
-      retry_count: metricsRef.current.retry_count,
-      hints_used: metricsRef.current.hints_used,
-      marks_gained: statsRef.current.marks_gained,
-      marks_total: statsRef.current.marks_total,
+      retry_count:         metricsRef.current.retry_count,
+      hints_used:          metricsRef.current.hints_used,
+      marks_gained:        statsRef.current.marks_gained,
+      marks_total:         statsRef.current.marks_total,
+      time_spent_seconds:  totalTimeRef.current,
     };
 
-    // ✅ update current subtopic with full data
     progress.subtopics[subtopicIndex] = {
       score,
-      completed: true,
-      metrics: fullMetrics, // 🔥 IMPORTANT ADDITION
+      completed: passed,
+      attempted: true,
+      metrics: fullMetrics,
     };
 
-    // 📈 calculate overall score
     const scores = Object.values(progress.subtopics).map(s => s.score || 0);
     progress.overallScore = scores.reduce((a, b) => a + b, 0) / 5;
 
-    // 💾 save progress
     saveProgress(studentId, progress);
     localStorage.removeItem("its_resume");
-    // 🚀 send full data to App (for Result Page)
-    onComplete({
-      ...fullMetrics,
-      score,
-    });
+    localStorage.removeItem(`session_${studentId}_${subtopicIndex}`);
+
+    onComplete({ ...fullMetrics, score, passed });
   }
 
+  // ── Handle answer selection ───────────────────────────────────────────────
   function handleSelect(opt) {
     const isCorrect = opt.is_correct === true;
     setSelectedKey(opt.key);
+
+    // Pause timer and accumulate elapsed time for this question
+    setTimerActive(false);
+    totalTimeRef.current += elapsed;
 
     if (!isCorrect) updateMis(opt.misconception_mapped ?? 0);
 
@@ -228,24 +797,54 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
       if (isCorrect) {
         const { marks, action } = evaluateAnswer({
           isCorrect: true,
-          responseTime,
           hintUsed,
           attempt: 1,
           difficulty,
         });
 
-        pendingAction.current = action;
+        // ── Resolve "candidate" → "increase" or "same" ───────────────────
+        // action === "candidate": correct, attempt 1, no hint used.
+        //
+        // Step 1 — record this response time for the difficulty.
+        // Step 2 — call shouldIncreaseDifficulty() which checks:
+        //   (a) solved count (post-increment) >= THRESHOLDS[difficulty]
+        //       → if NOT met, returns "same" immediately (not enough data yet)
+        //   (b) only once threshold IS met: avg response time vs TIME_THRESHOLDS
+        //       easy ≤ 20 s | medium ≤ 30 s | hard ≤ 45 s
+        //       fast (avg ≤ threshold) → "increase"
+        //       slow (avg >  threshold) → "same" (stay at current level)
+        let resolvedAction = action;
+        if (action === "candidate") {
+          // Append current response time to the per-difficulty list
+          responseTimesRef.current[difficulty] = [
+            ...responseTimesRef.current[difficulty],
+            responseTime,
+          ];
+
+          // Build post-increment solved counts (state hasn't updated yet)
+          const statsForCheck = {
+            num_easy_solved: statsRef.current.num_easy_solved + (difficulty === "easy"   ? 1 : 0),
+            num_med_solved:  statsRef.current.num_med_solved  + (difficulty === "medium" ? 1 : 0),
+            num_hard_solved: statsRef.current.num_hard_solved + (difficulty === "hard"   ? 1 : 0),
+          };
+
+          resolvedAction = shouldIncreaseDifficulty(
+            difficulty,
+            statsForCheck,
+            responseTimesRef.current[difficulty],
+          );
+        }
+
+        pendingAction.current = resolvedAction;
 
         updateStats(prev => {
           const u = { ...prev };
           u.marks_gained += marks;
-          u.marks_total += difficultyMarks[difficulty];
-          u.attempted += 1;
-
-          if (difficulty === "easy") u.num_easy_solved += 1;
-          if (difficulty === "medium") u.num_med_solved += 1;
-          if (difficulty === "hard") u.num_hard_solved += 1;
-
+          u.marks_total  += difficultyMarks[difficulty];
+          u.attempted    += 1;
+          if (difficulty === "easy")   u.num_easy_solved += 1;
+          if (difficulty === "medium") u.num_med_solved  += 1;
+          if (difficulty === "hard")   u.num_hard_solved += 1;
           return u;
         });
 
@@ -254,9 +853,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         setPhase("next");
 
       } else {
-        // ❌ DO NOT REMOVE SELECTED KEY (fix UI bug)
-        // setSelectedKey(null); ❌ remove this line
-
+        // Wrong on attempt 1 — give a retry; speed is not tracked for wrong answers
         setFeedback(opt.feedback);
         setAttempt(2);
         setPhase("retry");
@@ -264,12 +861,12 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
       }
 
     } else {
+      // attempt === 2 — speed is irrelevant, always "same"
       pendingAction.current = "same";
 
       if (isCorrect) {
         const { marks } = evaluateAnswer({
           isCorrect: true,
-          responseTime: 0,
           hintUsed,
           attempt: 2,
           difficulty,
@@ -278,13 +875,11 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         updateStats(prev => {
           const u = { ...prev };
           u.marks_gained += marks;
-          u.marks_total += difficultyMarks[difficulty];
-          u.attempted += 1;
-
-          if (difficulty === "easy") u.num_easy_solved += 1;
-          if (difficulty === "medium") u.num_med_solved += 1;
-          if (difficulty === "hard") u.num_hard_solved += 1;
-
+          u.marks_total  += difficultyMarks[difficulty];
+          u.attempted    += 1;
+          if (difficulty === "easy")   u.num_easy_solved += 1;
+          if (difficulty === "medium") u.num_med_solved  += 1;
+          if (difficulty === "hard")   u.num_hard_solved += 1;
           return u;
         });
 
@@ -296,7 +891,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         updateStats(prev => ({
           ...prev,
           marks_total: prev.marks_total + difficultyMarks[difficulty],
-          attempted: prev.attempted + 1,
+          attempted:   prev.attempted + 1,
         }));
 
         recordWrong();
@@ -306,19 +901,20 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
       }
     }
 
-    // 🧠 🔥 SAVE RESUME STATE (VERY IMPORTANT)
+    // 🧠 Save resume state
     localStorage.setItem(
       "its_resume",
       JSON.stringify({
         subtopicIndex,
         currentQuestion: current,
         difficulty,
-        stats: statsRef.current,
+        stats:   statsRef.current,
         metrics: metricsRef.current,
         usedIds: Array.from(usedIds.current),
       })
     );
   }
+
   function handleHintUse() {
     if (!hintUsed) { setHintUsed(true); recordHintUsed(); }
   }
@@ -330,7 +926,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
       setRemedialKey(remKey);
       return;
     }
-    const nextDiff = nextDifficulty(difficulty, pendingAction.current, statsRef.current);
+    const nextDiff = nextDifficulty(difficulty, pendingAction.current);
     if (nextDiff === "end") { finishAssessment(); return; }
     loadNextQuestion(nextDiff);
     localStorage.setItem(
@@ -339,7 +935,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         subtopicIndex,
         currentQuestion: current,
         difficulty,
-        stats: statsRef.current,
+        stats:   statsRef.current,
         metrics: metricsRef.current,
         usedIds: Array.from(usedIds.current),
       })
@@ -349,10 +945,11 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
   function handleNext() { proceedToNext(); }
   function handleRemedialContinue() { setRemedialKey(null); proceedToNext(); }
 
-  // ── Done screen (brief — App navigates away after dispatch) ──────────────
+  // ── Done screen ───────────────────────────────────────────────────────────
   if (assessmentDone) {
     const score = stats.marks_total > 0
-      ? ((stats.marks_gained / stats.marks_total) * 100).toFixed(1) : "0.0";
+      ? ((stats.marks_gained / stats.marks_total) * 100).toFixed(1)
+      : "0.0";
     return (
       <div className="p-6 max-w-2xl mx-auto text-center mt-10 space-y-4">
         <h1 className="text-3xl font-bold text-green-700">Subtopic {subtopicIndex} Complete! 🎉</h1>
@@ -371,6 +968,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
     );
   }
 
+  // ── Remedial screen ───────────────────────────────────────────────────────
   if (remedialKey) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-100 py-10">
@@ -393,6 +991,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
   if (!current) return <div className="text-center mt-10 text-gray-500">Loading...</div>;
 
   const isAnswered = phase === "next" || phase === "solution";
+  const threshold  = TIME_THRESHOLDS[difficulty]; // easy:20  medium:30  hard:45
 
   return (
     <>
@@ -400,20 +999,32 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         active={exitGuardActive}
         sessionData={sessionData}
         metricsRef={metricsRef}
-        statsRef={statsRef}          // 🔥 add
-        current={current}            // 🔥 add
-        difficulty={difficulty}      // 🔥 add
-        subtopicIndex={subtopicIndex}// 🔥 add
-        usedIds={usedIds}            // 🔥 add
+        statsRef={statsRef}
+        current={current}
+        difficulty={difficulty}
+        subtopicIndex={subtopicIndex}
+        usedIds={usedIds}
         onConfirmExit={onExit}
       />
       <div className="p-6 max-w-2xl mx-auto space-y-4">
+
+        {/* Status bar */}
         <div className="flex justify-between text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
           <span>Subtopic <strong>{subtopicIndex}</strong> — <span className="capitalize">{difficulty}</span></span>
           <span>Easy: {stats.num_easy_solved} | Med: {stats.num_med_solved} | Hard: {stats.num_hard_solved}</span>
           <span>Score: {stats.marks_total > 0 ? ((stats.marks_gained / stats.marks_total) * 100).toFixed(0) : 0}%</span>
         </div>
 
+        {/* ── Question Timer ──────────────────────────────────────────────── */}
+        <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-mono text-lg font-bold border-2 transition-colors ${timerColorClasses(elapsed, difficulty, timerActive)}`}>
+          <span>{timerActive ? "⏱" : "⏸"}</span>
+          <span>{timerDisplay}</span>
+          {timerActive && elapsed >= threshold && (
+            <span className="text-xs font-normal ml-1">Take your time!</span>
+          )}
+        </div>
+
+        {/* Metrics row */}
         <div className="flex gap-4 text-xs text-gray-400 bg-white border border-gray-100 rounded-xl px-4 py-2">
           <span>✅ {metrics.correct_answers}</span>
           <span>❌ {metrics.wrong_answers}</span>
@@ -448,8 +1059,10 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         )}
 
         {isAnswered && (
-          <button onClick={handleNext}
-            className="w-full bg-blue-600 text-white py-3 rounded-xl mt-4 hover:bg-blue-700 transition font-semibold">
+          <button
+            onClick={handleNext}
+            className="w-full bg-blue-600 text-white py-3 rounded-xl mt-4 hover:bg-blue-700 transition font-semibold"
+          >
             Next Question →
           </button>
         )}
