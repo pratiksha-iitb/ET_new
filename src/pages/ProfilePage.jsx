@@ -74,7 +74,7 @@
 //     </div>
 //   );
 // }
-
+import { misconceptionsContent } from "../data/misconceptions";
 import { loadProgress } from "../utils/progressManager";
 
 function formatTime(seconds) {
@@ -156,6 +156,24 @@ export default function ProfilePage({ studentId, onBack }) {
                       </span>
                     )}
                   </p>
+                  {/* 🔥 WEAK AREA */}
+                  {data.weak_concept && (
+                    <div className="col-span-2 mt-3 p-3 bg-red-50 border border-red-200 rounded-xl">
+
+                      <p className="text-red-700 font-semibold mb-1">
+                        ⚠️ Weak Area: {data.weak_concept.title}
+                      </p>
+
+                      <p className="text-sm text-gray-700">
+                        {data.weak_concept.explanation}
+                      </p>
+
+                      <p className="text-xs text-gray-500 mt-1 italic">
+                        Example: {data.weak_concept.example}
+                      </p>
+
+                    </div>
+                  )}
 
                 </div>
               )}

@@ -133,6 +133,51 @@ export default function ReadingPage2({ onStartAssessment }) {
             ></iframe>
           </div>
         </section>
+        <section className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-green-100 hover:shadow-xl transition">
+  <h2 className="text-xl font-semibold mb-4 text-green-800">
+    Concepts Included (Revision)
+  </h2>
+
+  <div className="space-y-4">
+
+    <div>
+      <p className="font-semibold">Concept 1: Each digit corresponds to a power of 10</p>
+      <p className="text-sm text-gray-700">
+        Every digit in a number has a place value represented by powers of 10.
+        <br />
+        Example: 345 = 3×10^2 + 4×10^1 + 5×10^0
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 2: Decimal digits use negative powers</p>
+      <p className="text-sm text-gray-700">
+        Digits after the decimal are represented using negative powers of 10.
+        <br />
+        Example: 0.45 = 4×10^-1 + 5×10^-2
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 3: Zero acts as a placeholder</p>
+      <p className="text-sm text-gray-700">
+        Even if a place has no value, we include it using zero to maintain correct position.
+        <br />
+        Example: 402 = 4×10^2 + 0×10^1 + 2×10^0
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 4: Reconstructing number from expansion</p>
+      <p className="text-sm text-gray-700">
+        Adding all expanded terms gives the original number.
+        <br />
+        Example: 2×10^1 + 3×10^0 = 20 + 3 = 23
+      </p>
+    </div>
+
+  </div>
+</section>
 
         {/* ── BUTTON ───────────────── */}
         <button

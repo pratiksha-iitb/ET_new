@@ -14,7 +14,7 @@ import Img1 from "../assets/subtopic1_img.jpeg";
 
 export default function ReadingPage1({ onStartAssessment }) {
   return (
-   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
       <div className="max-w-5xl mx-auto px-6 space-y-8">
 
         {/* ── TITLE ───────────────── */}
@@ -122,11 +122,11 @@ export default function ReadingPage1({ onStartAssessment }) {
         </section>
         <section className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-purple-100 hover:shadow-xl transition">
           <h2 className="text-xl font-semibold mb-3 text-purple-700">
-             Prefer Video Learning? 🎥
-           </h2>
+            Prefer Video Learning? 🎥
+          </h2>
 
-           <p className="text-gray-700 mb-4">
-           Watch this quick video to understand the concept better:
+          <p className="text-gray-700 mb-4">
+            Watch this quick video to understand the concept better:
           </p>
 
           <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-md">
@@ -136,6 +136,52 @@ export default function ReadingPage1({ onStartAssessment }) {
               title="YouTube video"
               allowFullScreen
             ></iframe>
+          </div>
+        </section>
+        {/* ── ADDITIONAL CONCEPTS ───────────────── */}
+        <section className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-green-100 hover:shadow-xl transition">
+          <h2 className="text-xl font-semibold mb-4 text-green-800">
+            Concepts Included (Revision)
+          </h2>
+
+          <div className="space-y-4">
+
+            <div>
+              <p className="font-semibold">Concept 1: Negative exponent represents reciprocal</p>
+              <p className="text-sm text-gray-700">
+                A negative exponent means we take the reciprocal (flip the number) and make the exponent positive.
+                <br />
+                Example: 5^-2 = 1 / 5^2 = 1/25
+              </p>
+            </div>
+
+            <div>
+              <p className="font-semibold">Concept 2: Negative exponents apply to fractions</p>
+              <p className="text-sm text-gray-700">
+                When a fraction has a negative exponent, we invert the fraction and make the exponent positive.
+                <br />
+                Example: (1/2)^-3 = (2/1)^3 = 8
+              </p>
+            </div>
+
+            <div>
+              <p className="font-semibold">Concept 3: Moving across fraction changes sign</p>
+              <p className="text-sm text-gray-700">
+                When a term moves from numerator to denominator (or vice versa), the exponent sign changes.
+                <br />
+                Example: 3^-2 = 1 / 3^2 = 1/9
+              </p>
+            </div>
+
+            <div>
+              <p className="font-semibold">Concept 4: Negative exponent ≠ negative value</p>
+              <p className="text-sm text-gray-700">
+                A negative exponent only changes position (reciprocal), not the sign of the number.
+                <br />
+                Example: 2^-2 = 1/4 (not −4)
+              </p>
+            </div>
+
           </div>
         </section>
 

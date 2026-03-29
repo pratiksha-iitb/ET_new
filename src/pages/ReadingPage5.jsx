@@ -117,6 +117,51 @@ export default function ReadingPage5({ onStartAssessment }) {
             ></iframe>
           </div>
         </section>
+        <section className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-green-100 hover:shadow-xl transition">
+  <h2 className="text-xl font-semibold mb-4 text-green-800">
+    Concepts Included (Revision)
+  </h2>
+
+  <div className="space-y-4">
+
+    <div>
+      <p className="font-semibold">Concept 1: Compare exponents first</p>
+      <p className="text-sm text-gray-700">
+        When bases are the same, the number with the larger exponent is greater.
+        <br />
+        Example: 10^5 &gt; 10^3
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 2: More negative exponent means smaller number</p>
+      <p className="text-sm text-gray-700">
+        A larger negative exponent represents a smaller value.
+        <br />
+        Example: 10^-6 &lt; 10^-3
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 3: Equalize exponents for operations</p>
+      <p className="text-sm text-gray-700">
+        For addition/subtraction, convert numbers to the same power of 10 first.
+        <br />
+        Example: 2×10^3 + 3×10^3 = 5×10^3
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 4: Ratios use division of powers</p>
+      <p className="text-sm text-gray-700">
+        To compare magnitude, divide and apply exponent rules.
+        <br />
+        Example: (10^6)/(10^2) = 10^4
+      </p>
+    </div>
+
+  </div>
+</section>
 
 
         <button

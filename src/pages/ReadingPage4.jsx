@@ -114,6 +114,52 @@ export default function ReadingPage4({ onStartAssessment }) {
             ></iframe>
           </div>
         </section>
+        <section className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-green-100 hover:shadow-xl transition">
+  <h2 className="text-xl font-semibold mb-4 text-green-800">
+    Concepts Included (Revision)
+  </h2>
+
+  <div className="space-y-4">
+
+    <div>
+      <p className="font-semibold">Concept 1: Standard form structure</p>
+      <p className="text-sm text-gray-700">
+        A number in standard form is written as a number between 1 and 10 multiplied by a power of 10.
+        <br />
+        Example: 0.0005 = 5 × 10^-4
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 2: Decimal movement determines exponent</p>
+      <p className="text-sm text-gray-700">
+        Moving the decimal to the right gives a negative exponent equal to the number of moves.
+        <br />
+        Example: 0.002 = 2 × 10^-3
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 3: Only one non-zero digit before decimal</p>
+      <p className="text-sm text-gray-700">
+        In standard form, there must be exactly one non-zero digit before the decimal point.
+        <br />
+        Example: 45×10^-3 = 4.5×10^-2
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 4: Counting decimal jumps correctly</p>
+      <p className="text-sm text-gray-700">
+        The exponent depends on how many places the decimal is shifted.
+        <br />
+        Example: 0.00009 = 9×10^-5
+      </p>
+    </div>
+
+  </div>
+</section>
+        
 
         <button
           onClick={onStartAssessment}

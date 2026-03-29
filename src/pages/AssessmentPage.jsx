@@ -592,7 +592,7 @@ function timerColorClasses(elapsed, difficulty, active) {
   if (!active) return "bg-gray-50 border-gray-200 text-gray-400";
   const threshold = TIME_THRESHOLDS[difficulty];
   if (elapsed < threshold * 0.5) return "bg-green-50 border-green-300 text-green-700";
-  if (elapsed < threshold)       return "bg-yellow-50 border-yellow-300 text-yellow-700";
+  if (elapsed < threshold) return "bg-yellow-50 border-yellow-300 text-yellow-700";
   return "bg-red-50 border-red-300 text-red-600 animate-pulse";
 }
 
@@ -603,9 +603,9 @@ const ALL_QUESTIONS = { 1: q1, 2: q2, 3: q3, 4: q4, 5: q5 };
 function buildPool(idx) {
   const qs = ALL_QUESTIONS[idx] || [];
   return {
-    easy:   qs.filter(q => q.difficulty === "easy"),
+    easy: qs.filter(q => q.difficulty === "easy"),
     medium: qs.filter(q => q.difficulty === "medium"),
-    hard:   qs.filter(q => q.difficulty === "hard"),
+    hard: qs.filter(q => q.difficulty === "hard"),
   };
 }
 
@@ -621,10 +621,10 @@ const INIT_STATS = {
 };
 
 export default function AssessmentPage({ subtopicIndex, sessionData, onComplete, onExit }) {
-  const pool    = useRef(buildPool(subtopicIndex));
+  const pool = useRef(buildPool(subtopicIndex));
   const usedIds = useRef(new Set());
 
-  const saved    = JSON.parse(localStorage.getItem("its_resume"));
+  const saved = JSON.parse(localStorage.getItem("its_resume"));
   const progress = loadProgress(sessionData.student_id);
 
   const shouldResume =
@@ -638,7 +638,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
     }
   }, []); // eslint-disable-line
 
-  const startTimeRef  = useRef(Date.now());
+  const startTimeRef = useRef(Date.now());
   const pendingAction = useRef("same");
 
   // ── Per-difficulty response-time accumulator ──────────────────────────────
@@ -676,12 +676,12 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
     });
   }
 
-  const [attempt, setAttempt]           = useState(1);
-  const [hintUsed, setHintUsed]         = useState(false);
-  const [selectedKey, setSelectedKey]   = useState(null);
-  const [feedback, setFeedback]         = useState("");
+  const [attempt, setAttempt] = useState(1);
+  const [hintUsed, setHintUsed] = useState(false);
+  const [selectedKey, setSelectedKey] = useState(null);
+  const [feedback, setFeedback] = useState("");
   const [showSolution, setShowSolution] = useState(false);
-  const [phase, setPhase]               = useState("answering");
+  const [phase, setPhase] = useState("answering");
 
   // ── Timer state ───────────────────────────────────────────────────────────
   const [timerActive, setTimerActive] = useState(true);
@@ -705,8 +705,8 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
     }
   }, []); // eslint-disable-line
 
-  const [remedialKey, setRemedialKey]         = useState(null);
-  const [assessmentDone, setAssessmentDone]   = useState(false);
+  const [remedialKey, setRemedialKey] = useState(null);
+  const [assessmentDone, setAssessmentDone] = useState(false);
   const [exitGuardActive, setExitGuardActive] = useState(true);
 
   // ── Load next question ────────────────────────────────────────────────────
@@ -714,7 +714,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
     const q = pickQuestion(pool.current, diff, usedIds.current);
 
     if (!q) {
-      if (diff === "easy")   return loadNextQuestion("medium");
+      if (diff === "easy") return loadNextQuestion("medium");
       if (diff === "medium") return loadNextQuestion("hard");
       finishAssessment();
       return;
@@ -753,21 +753,31 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
     const progress = loadProgress(studentId);
 
     const fullMetrics = {
-      correct_answers:     metricsRef.current.correct_answers,
-      wrong_answers:       metricsRef.current.wrong_answers,
+      correct_answers: metricsRef.current.correct_answers,
+      wrong_answers: metricsRef.current.wrong_answers,
       questions_attempted: metricsRef.current.questions_attempted,
-      retry_count:         metricsRef.current.retry_count,
-      hints_used:          metricsRef.current.hints_used,
-      marks_gained:        statsRef.current.marks_gained,
-      marks_total:         statsRef.current.marks_total,
-      time_spent_seconds:  totalTimeRef.current,
+      retry_count: metricsRef.current.retry_count,
+      hints_used: metricsRef.current.hints_used,
+      marks_gained: statsRef.current.marks_gained,
+      marks_total: statsRef.current.marks_total,
+      time_spent_seconds: totalTimeRef.current,
     };
+    // 🔥 FIND MOST TRIGGERED MISCONCEPTION
+    const weakConceptEntry = Object.entries(misRef.current)
+      .filter(([k]) => k !== "0") // ignore default
+      .sort((a, b) => b[1] - a[1])[0];
 
+    const weakConceptKey = weakConceptEntry ? weakConceptEntry[0] : null;
     progress.subtopics[subtopicIndex] = {
       score,
       completed: passed,
       attempted: true,
       metrics: fullMetrics,
+
+      // 🔥 ADD THIS
+      weak_concept: weakConceptKey
+        ? misconceptionsContent[weakConceptKey]
+        : null,
     };
 
     const scores = Object.values(progress.subtopics).map(s => s.score || 0);
@@ -823,9 +833,9 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
 
           // Build post-increment solved counts (state hasn't updated yet)
           const statsForCheck = {
-            num_easy_solved: statsRef.current.num_easy_solved + (difficulty === "easy"   ? 1 : 0),
-            num_med_solved:  statsRef.current.num_med_solved  + (difficulty === "medium" ? 1 : 0),
-            num_hard_solved: statsRef.current.num_hard_solved + (difficulty === "hard"   ? 1 : 0),
+            num_easy_solved: statsRef.current.num_easy_solved + (difficulty === "easy" ? 1 : 0),
+            num_med_solved: statsRef.current.num_med_solved + (difficulty === "medium" ? 1 : 0),
+            num_hard_solved: statsRef.current.num_hard_solved + (difficulty === "hard" ? 1 : 0),
           };
 
           resolvedAction = shouldIncreaseDifficulty(
@@ -840,11 +850,11 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         updateStats(prev => {
           const u = { ...prev };
           u.marks_gained += marks;
-          u.marks_total  += difficultyMarks[difficulty];
-          u.attempted    += 1;
-          if (difficulty === "easy")   u.num_easy_solved += 1;
-          if (difficulty === "medium") u.num_med_solved  += 1;
-          if (difficulty === "hard")   u.num_hard_solved += 1;
+          u.marks_total += difficultyMarks[difficulty];
+          u.attempted += 1;
+          if (difficulty === "easy") u.num_easy_solved += 1;
+          if (difficulty === "medium") u.num_med_solved += 1;
+          if (difficulty === "hard") u.num_hard_solved += 1;
           return u;
         });
 
@@ -875,11 +885,11 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         updateStats(prev => {
           const u = { ...prev };
           u.marks_gained += marks;
-          u.marks_total  += difficultyMarks[difficulty];
-          u.attempted    += 1;
-          if (difficulty === "easy")   u.num_easy_solved += 1;
-          if (difficulty === "medium") u.num_med_solved  += 1;
-          if (difficulty === "hard")   u.num_hard_solved += 1;
+          u.marks_total += difficultyMarks[difficulty];
+          u.attempted += 1;
+          if (difficulty === "easy") u.num_easy_solved += 1;
+          if (difficulty === "medium") u.num_med_solved += 1;
+          if (difficulty === "hard") u.num_hard_solved += 1;
           return u;
         });
 
@@ -891,7 +901,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         updateStats(prev => ({
           ...prev,
           marks_total: prev.marks_total + difficultyMarks[difficulty],
-          attempted:   prev.attempted + 1,
+          attempted: prev.attempted + 1,
         }));
 
         recordWrong();
@@ -908,7 +918,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         subtopicIndex,
         currentQuestion: current,
         difficulty,
-        stats:   statsRef.current,
+        stats: statsRef.current,
         metrics: metricsRef.current,
         usedIds: Array.from(usedIds.current),
       })
@@ -935,7 +945,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
         subtopicIndex,
         currentQuestion: current,
         difficulty,
-        stats:   statsRef.current,
+        stats: statsRef.current,
         metrics: metricsRef.current,
         usedIds: Array.from(usedIds.current),
       })
@@ -991,7 +1001,7 @@ export default function AssessmentPage({ subtopicIndex, sessionData, onComplete,
   if (!current) return <div className="text-center mt-10 text-gray-500">Loading...</div>;
 
   const isAnswered = phase === "next" || phase === "solution";
-  const threshold  = TIME_THRESHOLDS[difficulty]; // easy:20  medium:30  hard:45
+  const threshold = TIME_THRESHOLDS[difficulty]; // easy:20  medium:30  hard:45
 
   return (
     <>

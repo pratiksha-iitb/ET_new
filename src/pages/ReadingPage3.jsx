@@ -132,6 +132,51 @@ export default function ReadingPage3({ onStartAssessment }) {
             ></iframe>
           </div>
         </section>
+        <section className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-green-100 hover:shadow-xl transition">
+  <h2 className="text-xl font-semibold mb-4 text-green-800">
+    Concepts Included (Revision)
+  </h2>
+
+  <div className="space-y-4">
+
+    <div>
+      <p className="font-semibold">Concept 1: Product law (same base → add powers)</p>
+      <p className="text-sm text-gray-700">
+        When multiplying powers with the same base, we add the exponents.
+        <br />
+        Example: 2^3 × 2^2 = 2^(3+2) = 2^5 = 32
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 2: Quotient law (same base → subtract powers)</p>
+      <p className="text-sm text-gray-700">
+        When dividing powers with the same base, we subtract the exponents.
+        <br />
+        Example: 5^4 ÷ 5^2 = 5^(4−2) = 5^2 = 25
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 3: Power of a power (multiply exponents)</p>
+      <p className="text-sm text-gray-700">
+        When a power is raised to another power, we multiply the exponents.
+        <br />
+        Example: (3^2)^3 = 3^(2×3) = 3^6 = 729
+      </p>
+    </div>
+
+    <div>
+      <p className="font-semibold">Concept 4: Zero exponent rule</p>
+      <p className="text-sm text-gray-700">
+        Any non-zero number raised to the power 0 is equal to 1.
+        <br />
+        Example: 7^0 = 1
+      </p>
+    </div>
+
+  </div>
+</section>
 
         {/* ── BUTTON ───────────────── */}
         <button
