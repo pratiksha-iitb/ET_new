@@ -1,0 +1,468 @@
+[
+  {
+    "id": "Q1",
+    "difficulty": "easy",
+    "title": "The Product Rule",
+    "question_text": "Simplify the expression: p^3 × p^-10.",
+    "options": [
+      {
+        "key": "A",
+        "text": "p^13",
+        "misconception_mapped": 8,
+        "is_correct": false,
+        "feedback": "You might have subtracted the exponents (3 − (−10)). Remember that the Product Law requires you to add exponents when multiplying the same bases."
+      },
+      {
+        "key": "B",
+        "text": "p^-7",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! 🎉 You nailed it — you added the exponents perfectly."
+      },
+      {
+        "key": "C",
+        "text": "p^-30",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You multiplied the exponents (3 × −10). The Product Law says to add them: 3 + (−10)."
+      },
+      {
+        "key": "D",
+        "text": "−7p",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You treated the exponents like coefficients and multiplied them by the base. Exponents tell you how many times to multiply the base by itself."
+      }
+    ],
+    "hint": "Use the Product Law: a^m × a^n = a^(m+n).",
+    "full_solution": "p^3 × p^-10 = p^(3+(-10)) = p^-7"
+  },
+
+  {
+    "id": "Q2",
+    "difficulty": "easy",
+    "title": "Negative Neighbors",
+    "question_text": "Simplify: (−2)^−3 × (−2)^−4.",
+    "options": [
+      {
+        "key": "A",
+        "text": "(−2)^12",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "Don't multiply the exponents! Add them together, even if they are both negative."
+      },
+      {
+        "key": "B",
+        "text": "(−2)^−7",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Great job! 🔥 You correctly added the negative exponents."
+      },
+      {
+        "key": "C",
+        "text": "14",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "It looks like you multiplied the base by the sum of the exponents (−2 times −7). Exponents are not multipliers; they represent repeated multiplication."
+      },
+      {
+        "key": "D",
+        "text": "(−2)^−1",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "Check your addition of negative numbers. −3 + (−4) is not −1."
+      }
+    ],
+    "hint": "When bases are identical, add the negative exponents.",
+    "full_solution": "(−2)^−3 × (−2)^−4 = (−2)^(−3+(−4)) = (−2)^−7"
+  },
+
+  {
+    "id": "Q3",
+    "difficulty": "easy",
+    "title": "Mixed Signs",
+    "question_text": "Evaluate: 5^2 × 5^-4.",
+    "options": [
+      {
+        "key": "A",
+        "text": "5^−8",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You multiplied −2 × 4. The Product Law states we must add them: −2 + 4."
+      },
+      {
+        "key": "B",
+        "text": "5^-2",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Awesome! 💯 You handled positive and negative exponents perfectly."
+      },
+      {
+        "key": "C",
+        "text": "-25",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "A negative exponent like 5^−2 does not make the result negative; it creates a fraction."
+      },
+      {
+        "key": "D",
+        "text": "5^6",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You added the absolute values (2 + 4) but ignored the negative sign on the first exponent."
+      }
+    ],
+    "hint": "Add the exponents 2 and -4 using the product rule.",
+    "full_solution": "5^2 × 5^-4 = 5^(2-4) = 5^-2"
+  },
+
+  {
+    "id": "Q4",
+    "difficulty": "easy",
+    "title": "The Triple Product",
+    "question_text": "Simplify: 3^2 × 3^−5 × 3^6.",
+    "options": [
+      {
+        "key": "A",
+        "text": "3^3",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Boom! 💥 That was smooth — you added all exponents correctly."
+      },
+      {
+        "key": "B",
+        "text": "3^−60",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You multiplied all three exponents (2 × −5 × 6). You should add them instead."
+      },
+      {
+        "key": "C",
+        "text": "9",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "It looks like you multiplied the base 3 by the final exponent 3. Exponents indicate the number of times the base is used as a factor."
+      },
+      {
+        "key": "D",
+        "text": "3^13",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You added all numbers (2 + 5 + 6) but forgot that one exponent was negative."
+      }
+    ],
+    "hint": "Add all three exponents together: 2 + (−5) + 6.",
+    "full_solution": "3^2 × 3^−5 × 3^6 = 3^(2+(-5)+6) = 3^3"
+  },
+
+  {
+    "id": "Q5",
+    "difficulty": "easy",
+    "title": "The Zero Power",
+    "question_text": "Evaluate: (100 + 5)^0.",
+    "options": [
+      {
+        "key": "A",
+        "text": "0",
+        "misconception_mapped": 2,
+        "is_correct": false,
+        "feedback": "Any non-zero number raised to the power of 0 is always 1, not 0."
+      },
+      {
+        "key": "B",
+        "text": "1",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! 🎉 Classic rule — any non-zero number to power 0 is 1."
+      },
+      {
+        "key": "C",
+        "text": "105",
+        "misconception_mapped": 2,
+        "is_correct": false,
+        "feedback": "You treated the 0 exponent as if it had no effect on the base. Remember, a^0 = 1."
+      },
+      {
+        "key": "D",
+        "text": "100",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "It seems you ignored the 5 and the exponent. Solve the expression inside the parentheses first, then apply the exponent."
+      }
+    ],
+    "hint": "Any non-zero base raised to the power of zero equals one.",
+    "full_solution": "(100 + 5)^0 = 105^0. Since any non-zero number to the power of 0 is 1, the answer is 1."
+  },
+  {
+    "id": "Q6",
+    "difficulty": "medium",
+    "title": "Division Decisions",
+    "question_text": "Simplify: (−4)^5 ÷ (−4)^-8.",
+    "options": [
+      {
+        "key": "A",
+        "text": "(−4)^-3",
+        "misconception_mapped": 4,
+        "is_correct": false,
+        "feedback": "You added the exponents (5 +(- 8)). In division, you must subtract the second exponent from the first."
+      },
+      {
+        "key": "B",
+        "text": "(−4)^13",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Excellent! 🔥 You handled the double negative perfectly while subtracting exponents."
+      },
+      {
+        "key": "C",
+        "text": "12",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You multiplied the base −4 by the exponent −3. Exponents represent repeated multiplication."
+      },
+      {
+        "key": "D",
+        "text": "(−4)^-13",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You subtracted -8 − 5 instead of 5 − (-8). Order matters in the Quotient Law!"
+      }
+    ],
+    "hint": "Use the division rule: a^m ÷ a^n = a^(m−n).",
+    "full_solution": "(−4)^5 ÷ (−4)^-8 = (−4)^(5−(-8)) = (−4)^13"
+  },
+
+  {
+    "id": "Q7",
+    "difficulty": "medium",
+    "title": "The Double Negative",
+    "question_text": "Simplify: 2^5 ÷ 2^−6.",
+    "options": [
+      {
+        "key": "A",
+        "text": "2^−1",
+        "misconception_mapped": 4,
+        "is_correct": false,
+        "feedback": "You subtracted 5 − 6. But the exponent is −6, so you must subtract a negative: 5 − (−6)."
+      },
+      {
+        "key": "B",
+        "text": "2^11",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Great job! 🎯 You correctly converted subtraction of a negative into addition."
+      },
+      {
+        "key": "C",
+        "text": "2^−30",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You multiplied the exponents (5 × −6). Use the subtraction rule for division."
+      },
+      {
+        "key": "D",
+        "text": "2^1",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "It seems there was a subtraction error. Remember that subtracting a negative is the same as adding a positive."
+      }
+    ],
+    "hint": "When dividing, subtract the exponents: 5 − (−6).",
+    "full_solution": "2^5 ÷ 2^−6 = 2^(5−(−6)) = 2^11"
+  },
+
+  {
+    "id": "Q8",
+    "difficulty": "medium",
+    "title": "Power of a Power",
+    "question_text": "Simplify: (2^−3)^2.",
+    "options": [
+      {
+        "key": "A",
+        "text": "2^−1",
+        "misconception_mapped": 8,
+        "is_correct": false,
+        "feedback": "You added the exponents (−3 + 2). For a \"power of a power,\" you must multiply them."
+      },
+      {
+        "key": "B",
+        "text": "2^−6",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Awesome! 💯 You applied the power rule perfectly."
+      },
+      {
+        "key": "C",
+        "text": "−64",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "A negative exponent (2^−6) means 1/2^6, not a negative integer."
+      },
+      {
+        "key": "D",
+        "text": "2^−5",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "It looks like there was a calculation error. Multiply −3 by 2."
+      }
+    ],
+    "hint": "Multiply the exponents together using the rule (a^m)^n = a^(mn).",
+    "full_solution": "(2^−3)^2 = 2^(−3×2) = 2^−6"
+  },
+
+  {
+    "id": "Q9",
+    "difficulty": "medium",
+    "title": "Different Bases",
+    "question_text": "Simplify: a^−3 × b^−3.",
+    "options": [
+      {
+        "key": "A",
+        "text": "(ab)^−6",
+        "misconception_mapped": 8,
+        "is_correct": false,
+        "feedback": "You added the exponents, but the bases are different (a and b). You can only add exponents if the bases are the same."
+      },
+      {
+        "key": "B",
+        "text": "(ab)^−3",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Nice work! 😎 You correctly combined the bases while keeping the exponent."
+      },
+      {
+        "key": "C",
+        "text": "−(ab)^3",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "Negative exponents don't change the sign of the base; they represent a reciprocal."
+      },
+      {
+        "key": "D",
+        "text": "(ab)^9",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You multiplied the exponents and changed the sign. The rule is to keep the same exponent when bases are multiplied."
+      }
+    ],
+    "hint": "Since the exponents are the same, multiply the bases and keep the exponent.",
+    "full_solution": "Using the law a^m × b^m = (ab)^m, we get a^−3 × b^−3 = (ab)^−3"
+  },
+
+  {
+    "id": "Q10",
+    "difficulty": "hard",
+    "title": "Solving for m",
+    "question_text": "Find the value of m such that (−3)^(m+1) × (−3)^5 = (−3)^7.",
+    "options": [
+      {
+        "key": "A",
+        "text": "1",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Brilliant! 🧠 You solved the exponent equation perfectly."
+      },
+      {
+        "key": "B",
+        "text": "2",
+        "misconception_mapped": 8,
+        "is_correct": false,
+        "feedback": "You might have assumed m + 5 = 7, forgetting the +1 in the first exponent."
+      },
+      {
+        "key": "C",
+        "text": "−3",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "It seems you are trying to divide by the base. Focus only on the exponents since the bases are already identical on both sides."
+      },
+      {
+        "key": "D",
+        "text": "−1",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "Check your algebraic steps. (m + 1) + 5 = 7 leads to m + 6 = 7."
+      }
+    ],
+    "hint": "Add the exponents on the left side and set them equal to the exponent on the right.",
+    "full_solution": "(−3)^(m+1) × (−3)^5 = (−3)^(m+6). So Since bases are the same, m + 6 = 7 → m = 1."
+  },
+
+  {
+    "id": "Q11",
+    "difficulty": "hard",
+    "title": "Complex Combination",
+    "question_text": "Simplify: (2^5 ÷ 2^8)^5 × 2^−5.",
+    "options": [
+      {
+        "key": "A",
+        "text": "2^−15",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "It looks like you solved the bracket but missed the final multiplication step with 2^−5."
+      },
+      {
+        "key": "B",
+        "text": "2^−20",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Impressive! 💯 You handled multiple exponent rules step-by-step flawlessly."
+      },
+      {
+        "key": "C",
+        "text": "2^10",
+        "misconception_mapped": 4,
+        "is_correct": false,
+        "feedback": "Check the sign after division (5 − 8 = −3) and power ((−3)×5 = −15)."
+      },
+      {
+        "key": "D",
+        "text": "2^−10",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You may have added exponents where multiplication was required."
+      }
+    ],
+    "hint": "Work step-by-step: first division (subtract), then power of power (multiply), then product (add).",
+    "full_solution": "(2^5 ÷ 2^8)^5 × 2^−5 = (2^−3)^5 × 2^−5 = 2^−15 × 2^−5 = 2^−20"
+  },
+
+  {
+    "id": "Q12",
+    "difficulty": "hard",
+    "title": "The Sign Switch",
+    "question_text": "Simplify: (−3)^4 × (5/3)^4.",
+    "options": [
+      {
+        "key": "A",
+        "text": "−5^4",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "Although this problem has a negative base, the exponent is even ($4$). A negative number raised to an even power becomes positive"
+      },
+      {
+        "key": "B",
+        "text": "5^4",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Excellent! 🎉 You correctly combined the bases and handled the sign perfectly."
+      },
+      {
+        "key": "C",
+        "text": "15^4",
+        "misconception_mapped": 8,
+        "is_correct": false,
+        "feedback": "You multiplied the bases but ignored the division by 3 inside the second base"
+      },
+      {
+        "key": "D",
+        "text": "(−3/5)^4",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "Combined incorrectly."
+      }
+    ],
+    "hint": "Same exponent → multiply bases.",
+    "full_solution": "(−3)^4 × (5/3)^4 = (−5)^4 .Since 4 is even, (-5)^4 = 5^4 = 625"
+  }
+]

@@ -1,0 +1,458 @@
+[
+  {
+    "id": "Q1",
+    "difficulty": "easy",
+    "title": "The Dust Mite Challenge",
+    "question_text": "A speck of dust is 0.000035 meters long. How do we express this in standard form?",
+    "options": [
+      {
+        "key": "A",
+        "text": "3.5 × 10^5",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "It looks like you used a positive exponent. Remember, for tiny numbers (less than 1), the exponent must be negative to show we are dividing by 10."
+      },
+      {
+        "key": "B",
+        "text": "3.5 × 10^-5",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! Nice one — you’re getting the hang of this."
+      },
+      {
+        "key": "C",
+        "text": "35 × 10^-6",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Standard form requires exactly one non-zero digit before the decimal point. 35 is too big! Try moving the decimal so its sits between 3 and 5"
+      },
+      {
+        "key": "D",
+        "text": "3.5 × 10^-4",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You're close! But check your 'jump' count again. How many places does the decimal actually move to get behind the 3?"
+      }
+    ],
+    "hint": "Count decimal jumps to the right of the first non-zero digit.",
+    "full_solution": "To get 3.5 from 0.000035, the decimal moves 5 places to the right. Since it's a small number, the exponent is −5. Result: 3.5 × 10^-5.."
+  },
+  {
+    "id": "Q2",
+    "difficulty": "easy",
+    "title": "The Paper Trail",
+    "question_text": "The thickness of a sheet of paper is 0.0016 cm. What is its standard form?",
+    "options": [
+      {
+        "key": "A",
+        "text": "1.6 × 10^-3",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! Your thinking is on point."
+      },
+      {
+        "key": "B",
+        "text": "1.6 × 10^-2",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "You might have stopped the decimal too early. Count the jumps from its original spot to the right of the 1."
+      },
+      {
+        "key": "C",
+        "text": "-1.6 × 10^3",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "A negative exponent doesn't make the number negative; it just means it's a tiny decimal. Also, small numbers need negative exponents, not positive ones."
+      },
+      {
+        "key": "D",
+        "text": "16 × 10^-4",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "While the value is the same, this isn't 'Standard Form.' Standard form only allows one digit before the decimal (like 1.6)"
+      }
+    ],
+    "hint": "Move the decimal 3 places to the right to place it directly after the first non-zero digit (1).",
+    "full_solution": "Moving the decimal in 0.0016 three places right gives 1.6. The exponent is −3. Result: 1.6 × 10^-3."
+  },
+  {
+    "id": "Q3",
+    "difficulty": "easy",
+    "title": "Micro-Measurements",
+    "question_text": "True or False: 0.000000564 written in standard form is 5.64 × 10^-7.",
+    "options": [
+      {
+        "key": "A",
+        "text": "True",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "That’s right — your instincts are strong."
+      },
+      {
+        "key": "B",
+        "text": "False. The correct answer isnt in the options.",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "Check your count! If you jump the decimal 7 times, it lands between the 5 and the 6. That's the goal!"
+      },
+      {
+        "key": "C",
+        "text": "False ,it should be 5.64 × 10^7",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "A positive 7 would mean a very large number (over 50 million!). For this tiny decimal, we need the negative sign"
+      },
+      {
+        "key": "D",
+        "text": "False ,it should be 56.4 × 10^-8",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Standard form is picky! You can only have one digit (the 5) to the left of the decimal."
+      }
+    ],
+    "hint": "Count the jumps from the original decimal point to the spot between 5 and 6",
+    "full_solution": "To go from 0.000000564 to 5.64, the decimal moves 7 places right. This makes the exponent −7. The statement is True."
+  },
+  {
+    "id": "Q4",
+    "difficulty": "easy",
+    "title": "Binary Tiny",
+    "question_text": "The diameter of a wire is 0.0000021 m. What is its standard form?",
+    "options": [
+      {
+        "key": "A",
+        "text": "2.1 × 10^-6",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! You’re building real confidence here."
+      },
+      {
+        "key": "B",
+        "text": "21 × 10^-7",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You moved the decimal an extra step! In standard form, we stop as soon as there is one non-zero digit to the left of the decimal (2.1)."
+      },
+      {
+        "key": "C",
+        "text": "2.1 × 10^6",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "Don't forget the negative sign! Tiny decimals use negative exponents to show we are moving the decimal to the right."
+      },
+      {
+        "key": "D",
+        "text": "0.21 × 10^-5",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "You haven't moved the decimal far enough. There must be one non-zero digit (like 2) on the left side."
+      }
+    ],
+    "hint": "How many jumps does it take to get the decimal between the 2 and the 1?",
+    "full_solution": "Jumping 6 places right puts the decimal after the 2. Result: 2.1 × 10^-6."
+  },
+  {
+    "id": "Q5",
+    "difficulty": "easy",
+    "title": "The One-Tenth Rule",
+    "question_text": "What is the standard form of 0.1?",
+    "options": [
+      {
+        "key": "A",
+        "text": "1 × 10^-1",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! Keep Going!!"
+      },
+      {
+        "key": "B",
+        "text": "1 × 10^1",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "1 × 10^1 is 10. For the decimal 0.1, we need a negative exponent to show it's a fraction (1/10)."
+      },
+      {
+        "key": "C",
+        "text": "0.1 × 10^0",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Standard form requires the first number to be 1 or greater (up to 9.99...). 0.1 is too small; move that decimal!"
+      },
+      {
+        "key": "D",
+        "text": "1 × 10^0",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "10^0 is just 1. 1 × 1 equals 1, not 0.1."
+      }
+    ],
+    "hint": "Move the decimal one place to the right to get 1.",
+    "full_solution": "Moving the decimal 1 place right gives 1 × 10^-1."
+  },
+  {
+    "id": "Q6",
+    "difficulty": "medium",
+    "title": "Reverse Engineering",
+    "question_text": "A lab report lists a size as 7.54 × 10^-4 m. How would this look in usual decimal form?",
+    "options": [
+      {
+        "key": "A",
+        "text": "0.00754",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You moved the decimal 3 places, but the exponent is −4. You need one more jump!"
+      },
+      {
+        "key": "B",
+        "text": "0.000754",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Brilliant — this is your zone."
+      },
+      {
+        "key": "C",
+        "text": "75400",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "A negative exponent means the number is very small. You moved the decimal to the right to make a large number instead of moving it left."
+      },
+      {
+        "key": "D",
+        "text": "-0.000754",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "The negative exponent tells you the number is small, not that the whole value is negative."
+      }
+    ],
+    "hint": "A negative 4 exponent means you move the decimal 4 places to the left from its current spot.",
+    "full_solution": "Starting at 7.54, move the decimal 4 places left: 0.000754."
+  },
+  {
+    "id": "Q7",
+    "difficulty": "medium",
+    "title": "The Computer Chip",
+    "question_text": "A wire on a computer chip is 3 × 10^-8 m wide. What is this in usual form?",
+    "options": [
+      {
+        "key": "A",
+        "text": "0.00000003",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "You nailed it — keep this momentum going."
+      },
+      {
+        "key": "B",
+        "text": "0.000003",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Check your zero count. Moving 8 places left means you should have 7 zeros after the decimal point before the 3."
+      },
+      {
+        "key": "C",
+        "text": "300000000",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "You created a huge number! Remember, 10^-8 means the number is a tiny fraction."
+      },
+      {
+        "key": "D",
+        "text": "0.000000003",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "Extra shift."
+      }
+    ],
+    "hint": "Take the number 3 (which is 3.0) and move the decimal 8 places to the left.",
+    "full_solution": "Moving the decimal 8 places left from 3.0 results in 0.00000003."
+  },
+  {
+    "id": "Q8",
+    "difficulty": "medium",
+    "title": "Usual Suspects",
+    "question_text": "True or False: 3.02 × 10^-6 = 0.00000302",
+    "options": [
+      {
+        "key": "A",
+        "text": "True",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Great job! That’s solid reasoning."
+      },
+      {
+        "key": "B",
+        "text": "False, the correct answer isnt in the options.",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "If you move the decimal 6 places left from 3.02, you land exactly on 0.00000302. Try counting the jumps!"
+      },
+      {
+        "key": "C",
+        "text": "False, it should be 3,020,000",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "A negative exponent means move left for smallness, not right for largeness!"
+      },
+      {
+        "key": "D",
+        "text": "False, it should be 3.02 × −60",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "Exponents are position markers, not numbers to multiply by the base."
+      }
+    ],
+    "hint": "Move the decimal point 6 places to the left.",
+    "full_solution": "Moving the decimal 6 places left from 3.02 requires adding 5 zeros after the decimal point. The statement is True."
+  },
+  {
+    "id": "Q9",
+    "difficulty": "medium",
+    "title": "The Bacteria Build",
+    "question_text": "0.0000005 in standard form is?",
+    "options": [
+      {
+        "key": "A",
+        "text": "5 × 10^7",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "This would be a giant bacteria! Negative exponents are for tiny things."
+      },
+      {
+        "key": "B",
+        "text": "5 × 10^-7",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Spot on — you’re improving fast."
+      },
+      {
+        "key": "C",
+        "text": "50 × 10^-8",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Almost! But standard form only allows the single digit 5 to be in front."
+      },
+      {
+        "key": "D",
+        "text": "5 × −10^7",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "We use powers of 10, not multiplying the base by the exponent."
+      }
+    ],
+    "hint": "Count how many places you move the decimal to the right to get behind the 5.",
+    "full_solution": "Moving the decimal 7 places right gives 5 × 10^-7."
+  },
+  {
+    "id": "Q10",
+    "difficulty": "hard",
+    "title": "The Plant Cell Puzzle",
+    "question_text": "The size of a plant cell is 0.00001275 m. What is this in standard form?",
+    "options": [
+      {
+        "key": "A",
+        "text": "1.275 × 10^-5",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Well done — that was a sharp call."
+      },
+      {
+        "key": "B",
+        "text": "12.75 × 10^-6",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "You moved the decimal too far! Standard form requires exactly one non-zero digit before the decimal point."
+      },
+      {
+        "key": "C",
+        "text": "1.275 × 10^5",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "Positive exponents are for large distances. For a microscopic cell, we need that negative exponent!"
+      },
+      {
+        "key": "D",
+        "text": "0.1275 × 10^-4",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "Not quite standard form yet! You need a non-zero digit (like 1) in front of the decimal."
+      }
+    ],
+    "hint": "Move the decimal point so it sits right after the first non-zero digit (1).",
+    "full_solution": "In 0.00001275, the decimal moves 5 places right to get to 1.275. Result: 1.275 × 10^-5 m."
+  },
+  {
+    "id": "Q11",
+    "difficulty": "hard",
+    "title": "The Electron’s Charge",
+    "question_text": "The charge of an electron is 0.000, 000, 000, 000, 000, 000, 16 coulombs. How is this written in standard form?",
+    "options": [
+      {
+        "key": "A",
+        "text": "1.6 × 10^-19 ",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Impressive — you’re thinking like a pro."
+      },
+      {
+        "key": "B",
+        "text": "1.6 × 10^19",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "10^19 is a massive number! An electron's charge is incredibly tiny, so the exponent must be negative."
+      },
+      {
+        "key": "C",
+        "text": "16 × 10^-20",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Check your placement! Standard form must have the decimal after the 1, not the 6."
+      },
+      {
+        "key": "D",
+        "text": "1.6 × −190",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "Don't multiply 10 by the exponent! Use the exponent as a power."
+      }
+    ],
+    "hint": "Count every single place the decimal jumps to the right until it is between the 1 and the 6.",
+    "full_solution": "It takes 19 moves to the right to place the decimal between 1 and 6. Result: 1.6 × 10^-19."
+  },
+  {
+    "id": "Q12",
+    "difficulty": "hard",
+    "title": "Paper Thickness Redux",
+    "question_text": "A student measures a stack of thick paper and finds a single sheet is 0.07 mm thick. What is the standard form of this thickness in meters? (Note: 1 mm = 0.001 m)",
+    "options": [
+      {
+        "key": "A",
+        "text": "7 × 10^-5  ",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Impressive — you’re thinking like a pro."
+      },
+      {
+        "key": "B",
+        "text": "7 × 10^-2",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "This is the standard form in millimeters (0.07 mm = 7 × 10^-2 mm). You forgot to convert to meters!"
+      },
+      {
+        "key": "C",
+        "text": "7 × 10^5",
+        "misconception_mapped": 6,
+        "is_correct": false,
+        "feedback": "This would mean the paper is 700,000 meters thick! Stick with negative exponents for small decimals."
+      },
+      {
+        "key": "D",
+        "text": "0.7 × 10^-4",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Standard form requires the 7 to be in front of the decimal."
+      }
+    ],
+    "hint": "First, convert 0.07 mm to meters by dividing by 1000 (or moving the decimal 3 more places left). Then convert that tiny decimal to standard form.",
+    "full_solution": "First convert mm to m: 0.07 ÷ 1000 = 0.00007 m., Then move decimal 5 places right to get 7. Finally you get the result as 7 × 10^-5 m."
+  } 
+]

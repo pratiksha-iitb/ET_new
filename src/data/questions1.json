@@ -1,0 +1,458 @@
+[
+  {
+    "id": "Q1",
+    "difficulty": "easy",
+    "title": "The Inverse Journey",
+    "question_text": "A space explorer finds a signal with an intensity of 3^-2. What is the value of this intensity?",
+    "options": [
+      {
+        "key": "A",
+        "text": "-9",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "It looks like you think a negative exponent makes the number negative. Remember, the negative sign in the exponent acts like a 'flip' switch to turn the number into a fraction!"
+      },
+      {
+        "key": "B",
+        "text": "1/9",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! You correctly applied the negative exponent rule."
+      },
+      {
+        "key": "C",
+        "text": "-6",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "Be careful! You multiplied the base by the exponent (3 × -2). An exponent tells you how many times to multiply the base by itself."
+      },
+      {
+        "key": "D",
+        "text": "1/6",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You’ve turned it into a fraction, which is great, but check your multiplication for 3 × 3 again!"
+      }
+    ],
+    "hint": "A negative exponent represents the multiplicative inverse. Try writing it as 1 over the base with a positive exponent.",
+    "full_solution": "Using the rule a^-m = 1/a^m, we get 3^-2 = 1/3^2. Since 3^2 = 9, the value is 1/9."
+  },
+  {
+    "id": "Q2",
+    "difficulty": "easy",
+    "title": "The Multiplicative Twin",
+    "question_text": "What is the multiplicative inverse of 10^-5?",
+    "options": [
+      {
+        "key": "A",
+        "text": "1/10^5",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "This is actually the value of 10^-5, not its inverse. The multiplicative inverse is the number you multiply by to get 1."
+      },
+      {
+        "key": "B",
+        "text": "-10^5",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "Remember, the multiplicative inverse of a power with a negative exponent is the same base with a positive exponent. The sign of the base doesn't change."
+      },
+      {
+        "key": "C",
+        "text": "10^5",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! 10^-5 and 10^5 are reciprocals."
+      },
+      {
+        "key": "D",
+        "text": "-50",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "It looks like you multiplied 10 by -5. Exponents are about repeated multiplication, not simple multiplication!"
+      }
+    ],
+    "hint": "The multiplicative inverse of a^-m is a^m.",
+    "full_solution": "For any non-zero integer a, a^-m and a^m are multiplicative inverses because their product is a^0 = 1."
+  },
+  {
+    "id": "Q3",
+    "difficulty": "easy",
+    "title": "The Shrinking Potion",
+    "question_text": "In a fairy tale, a giant drinks a potion that makes him 5^-3 times his original size. How much did he shrink?",
+    "options": [
+      {
+        "key": "A",
+        "text": "-125",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "A negative size wouldn't make sense here! Remember that a^-m always results in a positive fraction if the base is positive."
+      },
+      {
+        "key": "B",
+        "text": "1/15",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "Did you multiply 5 × 3? Exponents mean 5 is multiplied by itself 3 times in the denominator!"
+      },
+      {
+        "key": "C",
+        "text": "1/125",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! 5 cubed is 125, and the negative exponent moves it to the denominator."
+      },
+      {
+        "key": "D",
+        "text": "1/25",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You are on the right track with a fraction, but you might have only multiplied 5 by itself twice (5 × 5). Try multiplying by 5 one more time!"
+      }
+    ],
+    "hint": "Use the rule a^-m = 1/a^m and calculate 5 × 5 × 5 for the denominator.",
+    "full_solution": "5^-3 = 1/5^3. Calculating the denominator: 5 × 5 × 5 = 125. Therefore, 1/125."
+  },
+  {
+    "id": "Q4",
+    "difficulty": "easy",
+    "title": "Binary Logic",
+    "question_text": "True or False: The value of (-2)^-4 is a negative number.",
+    "options": [
+      {
+        "key": "A",
+        "text": "True",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "Many students think negative exponents make the answer negative. However, (-2)^-4 = 1/(-2)^4. Since the power is even, the result is positive."
+      },
+      {
+        "key": "B",
+        "text": "False",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! An even exponent results in a positive value even if the base is negative."
+      },
+      {
+        "key": "C",
+        "text": "Both",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "A single numerical expression can only have one value. Review the rules for negative bases with even exponents!"
+      },
+      {
+        "key": "D",
+        "text": "None of the above",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "One of these must be true! Think about whether 1/(-2)^4 would be positive or negative."
+      }
+    ],
+    "hint": "A negative exponent means flip it. Then check if a negative base raised to an even power is positive or negative.",
+    "full_solution": "(-2)^-4 = 1/(-2)^4 = 1/16, which is positive."
+  },
+  {
+    "id": "Q5",
+    "difficulty": "easy",
+    "title": "The Micro-Scale",
+    "question_text": "A microscope zooms in by a factor of 2^-2. What fraction of the original view is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "-4",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "A zoom factor can't be negative in this context! The negative exponent just means we are looking at a smaller fraction."
+      },
+      {
+        "key": "B",
+        "text": "1/4",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! 2^-2 equals 1/4."
+      },
+      {
+        "key": "C",
+        "text": "1/2",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You correctly identified it’s a fraction, but 2^2 is not 2. Check the exponent again!"
+      },
+      {
+        "key": "D",
+        "text": "4",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You calculated 2 × 2 but forgot to 'flip' it into a fraction because of the negative exponent."
+      }
+    ],
+    "hint": "Apply the rule a^-m = 1/a^m to 2^-2.",
+    "full_solution": "2^-2 = 1/2^2 = 1/4."
+  },
+  {
+    "id": "Q6",
+    "difficulty": "medium",
+    "title": "The Elevator Challenge",
+    "question_text": "If you are at floor 1 and go down to floor 1/3^-2, what floor are you actually on?",
+    "options": [
+      {
+        "key": "A",
+        "text": "1/9",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You moved the exponent to the denominator, but it was already there! Moving a negative exponent from the bottom to the top makes it positive."
+      },
+      {
+        "key": "B",
+        "text": "9",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! You successfully moved the negative exponent to the numerator."
+      },
+      {
+        "key": "C",
+        "text": "-9",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "It seems you think negative exponents create negative numbers. In this case, it just flips the fraction back to a whole number."
+      },
+      {
+        "key": "D",
+        "text": "6",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "Watch out! You multiplied 3 by 2 instead of squaring it (3 × 3)."
+      }
+    ],
+    "hint": "Use the rule 1/a^-m = a^m.",
+    "full_solution": "1/3^-2 = 3^2 = 9."
+  },
+  {
+    "id": "Q7",
+    "difficulty": "medium",
+    "title": "The Flipping Fraction",
+    "question_text": "A chef is reducing a recipe by a factor of (2/3)^-2. What is the new multiplier?",
+    "options": [
+      {
+        "key": "A",
+        "text": "4/9",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You squared the fraction but forgot to flip it! A negative exponent on a fraction means you should take the reciprocal first."
+      },
+      {
+        "key": "B",
+        "text": "-4/9",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "Remember that (a/b)^-m is the same as (b/a)^m. It doesn't make the entire result negative."
+      },
+      {
+        "key": "C",
+        "text": "9/4",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! You flipped and squared the fraction."
+      },
+      {
+        "key": "D",
+        "text": "6/4",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You flipped the number, which is great. But it looks like you multiplied the numerator and denominator by the exponent. Both numbers must be squared!"
+      }
+    ],
+    "hint": "Use the general rule (a/b)^-m = (b/a)^m.",
+    "full_solution": "(2/3)^-2 = (3/2)^2 = 9/4."
+  },
+  {
+    "id": "Q8",
+    "difficulty": "medium",
+    "title": "The Decimal Detective",
+    "question_text": "A scientist records a measurement of 10^-3. How is this written as a decimal?",
+    "options": [
+      {
+        "key": "A",
+        "text": "0.001",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! 10 to the power of -3 is one thousandth."
+      },
+      {
+        "key": "B",
+        "text": "0.01",
+        "misconception_mapped": 3,
+        "is_correct": false,
+        "feedback": "Close! But 10^-2 is 0.01. For 10^-3, you need the digit to be in the third decimal place (thousandths)."
+      },
+      {
+        "key": "C",
+        "text": "-1000",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "Remember, 10^-3 means 1/10^3. It's a small positive fraction, not a large negative number."
+      },
+      {
+        "key": "D",
+        "text": "0.0001",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You added one too many zeros! Count the places: tenths (-1), hundredths (-2), and thousandths (-3)."
+      }
+    ],
+    "hint": "10^-3 = 1/10^3 = 1/1000.",
+    "full_solution": "10^-3 = 1/1000 = 0.001."
+  },
+  {
+    "id": "Q9",
+    "difficulty": "medium",
+    "title": "The Secret Code",
+    "question_text": "If a = 2 and b = -3, evaluate a^b.",
+    "options": [
+      {
+        "key": "A",
+        "text": "-8",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "When the exponent (b) is -3, it flips the base into a fraction. It doesn't make the result -8."
+      },
+      {
+        "key": "B",
+        "text": "1/8",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! 2 to the power of -3 is 1/8."
+      },
+      {
+        "key": "C",
+        "text": "-6",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "You multiplied 2 × (-3). Remember, a^b means multiplying a by itself b times (or its reciprocal if b is negative)."
+      },
+      {
+        "key": "D",
+        "text": "1/6",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "You correctly made it a fraction, but check your math for 2 × 2 × 2!"
+      }
+    ],
+    "hint": "Substitute the values to get 2^-3 and apply the negative exponent rule.",
+    "full_solution": "2^-3 = 1/2^3 = 1/8."
+  },
+  {
+    "id": "Q10",
+    "difficulty": "hard",
+    "title": "The Multi-Step Puzzle",
+    "question_text": "Evaluate the expression: (3^0 + 4^-1) × 2^2.",
+    "options": [
+      {
+        "key": "A",
+        "text": "5",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! (1 + 1/4) × 4 equals 5."
+      },
+      {
+        "key": "B",
+        "text": "1",
+        "misconception_mapped": 2,
+        "is_correct": false,
+        "feedback": "Did you think 3^0 was 0? Remember, any non-zero number to the power of 0 is 1!"
+      },
+      {
+        "key": "C",
+        "text": "6",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "It looks like there was an error in your addition inside the parentheses or the final multiplication. Try calculating (1 + 1/4) first."
+      },
+      {
+        "key": "D",
+        "text": "-12",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "Check 4^-1 again. It is 1/4, not -4. Also, ensure you aren't multiplying 4 × -1."
+      }
+    ],
+    "hint": "Solve inside the parentheses first. Remember 3^0 = 1 and 4^-1 = 1/4.",
+    "full_solution": "(1 + 0.25) × 4 = 1.25 × 4 = 5."
+  },
+  {
+    "id": "Q11",
+    "difficulty": "hard",
+    "title": "Solve",
+    "question_text": "2^0 × (3^-2 + 5(9^-1))",
+    "options": [
+      {
+        "key": "A",
+        "text": "6/9",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! You correctly simplified each term."
+      },
+      {
+        "key": "B",
+        "text": "-51",
+        "misconception_mapped": 5,
+        "is_correct": false,
+        "feedback": "It looks like you are multiplying base with the power, remember, 6^-1=1/6, not -6."
+      },
+      {
+        "key": "C",
+        "text": "0",
+        "misconception_mapped": 2,
+        "is_correct": false,
+        "feedback": "Did you think 2^0 was 0? Remember, any non-zero number to the power of 0 is 1!"
+      },
+      {
+        "key": "D",
+        "text": "1/2^5",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "Check your multiplication of the exponents again."
+      }
+    ],
+    "hint": "First, flip the negative exponents and convert them into fractions, then sum them.",
+    "full_solution": "1 × (1/9 + 5/9) = 6/9."
+  },
+  {
+    "id": "Q12",
+    "difficulty": "hard",
+    "title": "The Comparison Challenge",
+    "question_text": "Which is larger: (1/2)^-5 or 2^5?",
+    "options": [
+      {
+        "key": "A",
+        "text": "(1/2)^-5",
+        "misconception_mapped": 1,
+        "is_correct": false,
+        "feedback": "Do you think negative exponent make the value negative or smaller? Try flipping the fraction in the first one."
+      },
+      {
+        "key": "B",
+        "text": "2^5",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "These two are actually the same! Try calculating the value of the first one using the negative exponent rule."
+      },
+      {
+        "key": "C",
+        "text": "They are equal",
+        "misconception_mapped": 0,
+        "is_correct": true,
+        "feedback": "Correct! Both expressions evaluate to 32."
+      },
+      {
+        "key": "D",
+        "text": "Cannot be determined",
+        "misconception_mapped": 0,
+        "is_correct": false,
+        "feedback": "We can definitely calculate these! Use the rule (a/b)^-m = (b/a)^m."
+      }
+    ],
+    "hint": "Use the rule (a/b)^-m = (b/a)^m on the first expression.",
+    "full_solution": "(1/2)^-5 = 2^5 = 32. Both are equal."
+  }
+]
