@@ -369,6 +369,61 @@ export default function App() {
     setActiveSubtopic(null);
     setSessionData(null);
   }
+  async function handleExitCourse() {
+    const confirmExit = window.confirm("Exit full course?");
+
+    if (!confirmExit) return;
+
+    const token = sessionStorage.getItem("token");
+
+    const payload = {
+      student_id: sessionStorage.getItem("student_id"),
+      session_id: sessionStorage.getItem("session_id"),
+      chapter_id: "grade8_exponents_and_powers",
+
+      timestamp: new Date().toISOString(),
+      session_status: "exited_midway",
+
+      correct_answers: chapterMetrics.correct_answers,
+      wrong_answers: chapterMetrics.wrong_answers,
+      questions_attempted: chapterMetrics.questions_attempted,
+
+      total_questions: 60,
+      retry_count: chapterMetrics.retry_count,
+      hints_used: chapterMetrics.hints_used,
+      total_hints_embedded: 20,
+
+      time_spent_seconds: Math.max(60, Math.round(chapterMetrics.time_spent_seconds)),
+
+      topic_completion_ratio: completed.size / 5,
+    };
+
+    console.log("EXIT COURSE PAYLOAD:", payload);
+
+    try {
+      const res = await fetch("https://kaushik-dev.online/api/recommend/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      setRecommendation(data);
+
+      alert(data.recommendation.reason);
+
+      // 👉 REDIRECT BACK TO MERGE PLATFORM
+      window.location.href = "https://kaushik-dev.online/dashboard"; // or given URL
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send session");
+    }
+  }
 
   function handleSelectSubtopic(id) {
     setActiveSubtopic(id);
@@ -488,11 +543,17 @@ export default function App() {
           👤 {student?.studentName}
         </button>
 
-        <button
+        {/* <button
           onClick={handleLogout}
           className="text-xs text-red-500 border px-3 py-2 rounded-xl bg-white"
         >
           Logout
+        </button> */}
+        <button
+          onClick={handleExitCourse}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg"
+        >
+          Exit Course
         </button>
       </div>
     </div>
