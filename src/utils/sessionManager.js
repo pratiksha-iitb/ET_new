@@ -499,6 +499,7 @@ function writeToStorage(payload) {
 // 🚀 FINAL SEND FUNCTION (MERGE)
 
 export async function sendPayload(payload) {
+  console.log("FINAL PAYLOAD:", payload);
   try {
     console.log("📦 Sending payload:", payload);
 

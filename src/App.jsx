@@ -372,17 +372,17 @@ export default function App() {
       wrong_answers: chapterMetrics.wrong_answers,
       questions_attempted: chapterMetrics.questions_attempted,
 
-      total_questions: 60, // 🔥 update if needed
+      total_questions:chapterMetrics.questions_attempted, // 🔥 update if needed
 
       retry_count: chapterMetrics.retry_count,
       hints_used: chapterMetrics.hints_used,
-      total_hints_embedded: 20,
+      total_hints_embedded: chapterMetrics.questions_attempted,
 
       time_spent_seconds: Math.round(chapterMetrics.time_spent_seconds),
 
-      topic_completion_ratio: completed.size / 5, 
+      topic_completion_ratio: Number((completed.size / 5).toFixed(2)), 
     };
-
+    console.log("FINAL PAYLOAD:", payload);
     try {
       const res = await fetch(
         "https://kaushik-dev.online/api/recommend/",

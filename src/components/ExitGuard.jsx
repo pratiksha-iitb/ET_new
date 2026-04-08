@@ -94,10 +94,10 @@ export default function ExitGuard({
       total_questions: 60,
       retry_count: metricsRef.current.retry_count,
       hints_used: metricsRef.current.hints_used,
-      total_hints_embedded: 20,
+      total_hints_embedded: 60,
 
       time_spent_seconds: timeSpent,
-      topic_completion_ratio: completed.size / 5,  // partial
+      topic_completion_ratio: Number((completed.size / 5).toFixed(2)),  // partial
     };
 
     const blob = new Blob([JSON.stringify(payload)], {
@@ -158,12 +158,12 @@ export default function ExitGuard({
     total_questions: 60,
     retry_count: metricsRef.current.retry_count,
     hints_used: metricsRef.current.hints_used,
-    total_hints_embedded: 20,
+    total_hints_embedded: 60,
 
     time_spent_seconds: timeSpent,
-    topic_completion_ratio: 0.5,
+    topic_completion_ratio: Number((completed.size / 5).toFixed(2)),
   };
-
+  console.log("FINAL PAYLOAD:", payload);
   try {
     await fetch("https://kaushik-dev.online/api/recommend/", {
       method: "POST",
