@@ -36,27 +36,6 @@ export default function ExitGuard({
   useEffect(() => {
     if (!active) return;
 
-    // function handleBeforeUnload(e) {
-    //   // Show native browser confirmation dialog
-    //   e.preventDefault();
-    //   e.returnValue = ""; // required for Chrome
-
-    //   // Attempt to send exit payload via sendBeacon (works even when page is closing)
-    //   // sendBeacon is fire-and-forget — no await possible here
-    //   try {
-    //     const payload = {
-    //       ...metricsRef.current,
-    //       student_id:          sessionData.student_id,
-    //       session_id:          sessionData.session_id,
-    //       chapter_id:          sessionData.chapter_id,
-    //       session_status:      "exited_midway",
-    //       timestamp:           new Date().toISOString(),
-    //       time_spent_seconds:  Math.round((Date.now() - new Date(sessionData.start_time).getTime()) / 1000),
-    //     };
-    //     const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-    //     navigator.sendBeacon("/api/sessions/exit", blob); // adjust endpoint as needed
-    //   } catch (_) { /* silent fail */ }
-    // }
     function handleBeforeUnload(e) {
   e.preventDefault();
   e.returnValue = "";

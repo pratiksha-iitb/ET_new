@@ -363,7 +363,7 @@ export default function App() {
     const payload = {
       student_id,
       session_id,
-      chapter_id: "grade8_exponents",
+      chapter_id: "grade8_exponents_and_powers",
 
       timestamp: new Date().toISOString(),
       session_status: "completed",

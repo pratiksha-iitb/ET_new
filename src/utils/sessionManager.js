@@ -361,7 +361,7 @@
 export const CHAPTER_METADATA = {
   grade: 8,
   chapter_name: "Exponents and Powers",
-  chapter_id: "grade8_exponents",
+  chapter_id: "grade8_exponents_and_powers",
   chapter_url: "/assessment",
   chapter_difficulty: 0.5,
   expected_completion_time_seconds: 600,
