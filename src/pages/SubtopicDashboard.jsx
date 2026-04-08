@@ -201,7 +201,7 @@ const COLORS = [
   "from-pink-100 to-pink-50",
 ];
 
-export default function SubtopicDashboard({ onSelect, studentId }) {
+export default function SubtopicDashboard({ onSelect, studentId ,  recommendation}) {
   const progress = loadProgress(studentId) || { subtopics: {} };
 
   // ✅ FIX: count based on SCORE > 35 (NOT just completed)
