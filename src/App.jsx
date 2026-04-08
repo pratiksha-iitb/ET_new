@@ -218,6 +218,7 @@
 // }
 
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import AuthPage from "./pages/AuthPage";
 import SubtopicDashboard from "./pages/SubtopicDashboard";
