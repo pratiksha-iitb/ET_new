@@ -671,19 +671,18 @@ export default function App() {
     console.log("FINAL PAYLOAD:", payload);
 
     try {
-      const res = await axios.post(
-        "https://kaushik-dev.online/api/recommend/",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch("https://kaushik-dev.online/api/recommend/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
-      setRecommendation(res.data);
-      setShowRecommendation(true); // 🔥 SHOW UI
+      const data = await res.json();
+      setRecommendation(data);
+      setShowRecommendation(true);
 
     } catch (err) {
       console.error("❌ API Error:", err);
