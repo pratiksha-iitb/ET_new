@@ -733,41 +733,71 @@ export default function App() {
         {/* 🔥 RECOMMENDATION CARD (TOP) */}
         {recommendation && showRecommendation && (
           <div className="max-w-4xl mx-auto mt-6 p-6 rounded-2xl shadow bg-blue-50 border border-blue-200">
-            <h2 className="text-xl font-bold mb-2">
-              🎯 Recommendation
+
+            <h2 className="text-xl font-bold mb-3 text-blue-800">
+              🎯 Your Learning Report
             </h2>
 
+            {/* BASIC */}
             <p><b>State:</b> {recommendation.learning_state}</p>
-            <p><b>Performance:</b> {recommendation.performance_score}</p>
+            <p><b>Performance:</b> {recommendation.performance_score?.toFixed(2)}</p>
+            <p><b>Confidence:</b> {recommendation.confidence_score?.toFixed(2)}</p>
 
-            <p className="mt-2">
-              💡 {recommendation.recommendation?.reason}
-            </p>
+            {/* DIAGNOSIS */}
+            <div className="mt-3 p-3 bg-white rounded-lg border">
+              <p className="font-semibold text-gray-700 mb-1">📊 Diagnosis</p>
 
-            <ul className="mt-2 list-disc pl-5">
-              {recommendation.recommendation?.next_steps?.map((s, i) => (
-                <li key={i}>{s}</li>
-              ))}
-            </ul>
+              <p>Accuracy: {recommendation.diagnosis?.accuracy}</p>
+              <p>Hint Dependency: {recommendation.diagnosis?.hint_dependency}</p>
+              <p>Retry Behavior: {recommendation.diagnosis?.retry_behavior}</p>
+              <p>Time Efficiency: {recommendation.diagnosis?.time_efficiency}</p>
 
+              <p className="mt-2 text-sm text-gray-500">
+                Attempts: {recommendation.diagnosis?.history?.past_attempts || 0} |
+                Trend: {recommendation.diagnosis?.history?.trend}
+              </p>
+            </div>
+
+            {/* RECOMMENDATION */}
+            <div className="mt-4">
+              <p>
+                <b>Recommendation Type:</b>{" "}
+                <span className="capitalize">
+                  {recommendation.recommendation?.type}
+                </span>
+              </p>
+
+              <p className="mt-2 font-medium text-gray-800">
+                💡 {recommendation.recommendation?.reason}
+              </p>
+
+              <ul className="mt-2 list-disc pl-5 text-sm text-gray-700">
+                {recommendation.recommendation?.next_steps?.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* PREREQUISITE */}
             {recommendation.recommendation?.prerequisite_url && (
               <a
                 href={recommendation.recommendation.prerequisite_url}
-                className="inline-block mt-3 bg-red-500 text-white px-4 py-2 rounded"
+                className="inline-block mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
               >
                 Go to prerequisite
               </a>
             )}
 
+            {/* EXIT */}
             <button
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+              className="mt-5 bg-blue-600 text-white px-4 py-2 rounded-lg"
               onClick={() =>
-                (window.location.href =
-                  "https://kaushik-dev.online/dashboard")
+                (window.location.href = "https://kaushik-dev.online/dashboard")
               }
             >
-              Return to Platform
+              Return to dashboard
             </button>
+
           </div>
         )}
 
