@@ -58,58 +58,11 @@ export default function ExitGuard({
     //   } catch (_) { /* silent fail */ }
     // }
     function handleBeforeUnload(e) {
-      e.preventDefault();
-      e.returnValue = "";
+  e.preventDefault();
+  e.returnValue = "";
 
-      try {
-        // 🔥 SAVE RESUME
-        localStorage.setItem(
-          "its_resume",
-          JSON.stringify({
-            subtopicIndex,
-            currentQuestion: current,
-            difficulty,
-            stats: statsRef.current,
-            metrics: metricsRef.current,
-            usedIds: Array.from(usedIds.current),
-          })
-        );
-
-        const payload = {
-          ...metricsRef.current,
-          student_id: sessionData.student_id,
-          session_id: sessionData.session_id,
-          chapter_id: sessionData.chapter_id,
-          session_status: "exited_midway",
-          timestamp: new Date().toISOString(),
-          time_spent_seconds: Math.round(
-            (Date.now() - new Date(sessionData.start_time).getTime()) / 1000
-          ),
-        };
-
-        const blob = new Blob([JSON.stringify(payload)], {
-          type: "application/json",
-        });
-
-        navigator.sendBeacon("/api/sessions/exit", blob);
-
-      } catch (_) { }
-    }
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [active, sessionData, metricsRef]);
-
-  // ── 2. In-app exit — show custom modal ───────────────────────────────────
-  // async function handleConfirmExit() {
-  //   setShowModal(false);
-  //   await dispatchPayload(sessionData, metricsRef.current, "exited_midway");
-  //   onConfirmExit();
-  // }
-  async function handleConfirmExit() {
-    setShowModal(false);
-
-    // 🔥 SAVE RESUME BEFORE EXIT
+  try {
+    // 🔥 SAVE RESUME
     localStorage.setItem(
       "its_resume",
       JSON.stringify({
@@ -122,10 +75,110 @@ export default function ExitGuard({
       })
     );
 
-    await dispatchPayload(sessionData, metricsRef.current, "exited_midway");
+    const timeSpent = Math.round(
+      (Date.now() - new Date(sessionData.start_time).getTime()) / 1000
+    );
 
-    onConfirmExit();
+    const payload = {
+      student_id: sessionData.student_id,
+      session_id: sessionData.session_id,
+      chapter_id: sessionData.chapter_id,
+
+      timestamp: new Date().toISOString(),
+      session_status: "exited_midway",
+
+      correct_answers: metricsRef.current.correct_answers,
+      wrong_answers: metricsRef.current.wrong_answers,
+      questions_attempted: metricsRef.current.questions_attempted,
+
+      total_questions: 60,
+      retry_count: metricsRef.current.retry_count,
+      hints_used: metricsRef.current.hints_used,
+      total_hints_embedded: 20,
+
+      time_spent_seconds: timeSpent,
+      topic_completion_ratio: completed.size / 5,  // partial
+    };
+
+    const blob = new Blob([JSON.stringify(payload)], {
+      type: "application/json",
+    });
+
+    navigator.sendBeacon(
+      "https://kaushik-dev.online/api/recommend/",
+      blob
+    );
+
+  } catch (_) {}
+}
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [active, sessionData, metricsRef]);
+
+  // ── 2. In-app exit — show custom modal ───────────────────────────────────
+  // async function handleConfirmExit() {
+  //   setShowModal(false);
+  //   await dispatchPayload(sessionData, metricsRef.current, "exited_midway");
+  //   onConfirmExit();
+  // }
+ async function handleConfirmExit() {
+  setShowModal(false);
+
+  // 🔥 SAVE RESUME
+  localStorage.setItem(
+    "its_resume",
+    JSON.stringify({
+      subtopicIndex,
+      currentQuestion: current,
+      difficulty,
+      stats: statsRef.current,
+      metrics: metricsRef.current,
+      usedIds: Array.from(usedIds.current),
+    })
+  );
+
+  const token = sessionStorage.getItem("token");
+
+  const timeSpent = Math.round(
+    (Date.now() - new Date(sessionData.start_time).getTime()) / 1000
+  );
+
+  const payload = {
+    student_id: sessionData.student_id,
+    session_id: sessionData.session_id,
+    chapter_id: sessionData.chapter_id,
+
+    timestamp: new Date().toISOString(),
+    session_status: "exited_midway",
+
+    correct_answers: metricsRef.current.correct_answers,
+    wrong_answers: metricsRef.current.wrong_answers,
+    questions_attempted: metricsRef.current.questions_attempted,
+
+    total_questions: 60,
+    retry_count: metricsRef.current.retry_count,
+    hints_used: metricsRef.current.hints_used,
+    total_hints_embedded: 20,
+
+    time_spent_seconds: timeSpent,
+    topic_completion_ratio: 0.5,
+  };
+
+  try {
+    await fetch("https://kaushik-dev.online/api/recommend/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error("Exit API error", err);
   }
+
+  onConfirmExit();
+}
 
   if (!active) return null;
 
