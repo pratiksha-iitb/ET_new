@@ -301,8 +301,6 @@ export default function ExitGuard({
           type: "application/json",
         });
 
-        navigator.sendBeacon("/api/sessions/exit", blob);
-
       } catch (_) { }
     }
 
@@ -332,8 +330,6 @@ export default function ExitGuard({
       })
     );
 
-    await dispatchPayload(sessionData, metricsRef.current, "exited_midway");
-
     onConfirmExit();
   }
 
@@ -345,7 +341,7 @@ export default function ExitGuard({
       <div className="fixed top-4 left-4 z-40">
         <button
           onClick={() => setShowModal(true)}
-          className="text-xs bg-white border border-gray-300 text-gray-600 px-3 py-1.5 rounded-lg shadow hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition"
+          className="text-xs bg-white border border-gray-300 text-gray-600 px-20 py-2.5 rounded-lg shadow hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition"
         >
           ✕ Exit Assessment
         </button>
