@@ -257,11 +257,12 @@ const SCREENS = {
 };
 
 export default function App() {
-  const [student, setStudent] = useState(() => {
-    const id = sessionStorage.getItem("its_student_id");
-    const name = sessionStorage.getItem("its_student_name");
-    return id ? { studentId: id, studentName: name } : null;
-  });
+  // const [student, setStudent] = useState(() => {
+  //   const id = sessionStorage.getItem("its_student_id");
+  //   const name = sessionStorage.getItem("its_student_name");
+  //   return id ? { studentId: id, studentName: name } : null;
+  // });
+  const [student, setStudent] = useState(null);
 
   const [screen, setScreen] = useState(
     student ? SCREENS.DASHBOARD : SCREENS.AUTH
@@ -270,6 +271,7 @@ export default function App() {
   const [completed, setCompleted] = useState(new Set());
   const [sessionData, setSessionData] = useState(null);
   const [resultData, setResultData] = useState(null);
+  const [recommendation, setRecommendation] = useState(null);
 
   // 🔥 NEW: Chapter metrics
   const [chapterMetrics, setChapterMetrics] = useState({
@@ -282,6 +284,21 @@ export default function App() {
   });
 
   // 🔥 URL PARAM EXTRACTION (MERGE)
+  // useEffect(() => {
+  //   retryPendingPayload();
+
+  //   const params = new URLSearchParams(window.location.search);
+
+  //   const token = params.get("token");
+  //   const student_id = params.get("student_id");
+  //   const session_id = params.get("session_id");
+
+  //   if (token && student_id && session_id) {
+  //     sessionStorage.setItem("token", token);
+  //     sessionStorage.setItem("student_id", student_id);
+  //     sessionStorage.setItem("session_id", session_id);
+  //   }
+  // }, []);
   useEffect(() => {
     retryPendingPayload();
 
@@ -292,11 +309,51 @@ export default function App() {
     const session_id = params.get("session_id");
 
     if (token && student_id && session_id) {
+      console.log("🔥 Merge login detected");
+
+      const currentStudent = sessionStorage.getItem("student_id");
+
+      // 🚨 IF NEW STUDENT → RESET EVERYTHING
+      if (currentStudent !== student_id) {
+        console.log("🔄 Switching student session");
+
+        // Clear old session
+        sessionStorage.clear();
+
+        // Clear app state storage
+        localStorage.removeItem("its_resume");
+        localStorage.removeItem("pendingPayload");
+
+        // Reset React state
+        setCompleted(new Set());
+        setActiveSubtopic(null);
+        setSessionData(null);
+        setResultData(null);
+        setRecommendation(null);
+        setChapterMetrics({
+          correct_answers: 0,
+          wrong_answers: 0,
+          questions_attempted: 0,
+          retry_count: 0,
+          hints_used: 0,
+          time_spent_seconds: 0,
+        });
+      }
+
+      // ✅ SET NEW SESSION
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("student_id", student_id);
       sessionStorage.setItem("session_id", session_id);
+
+      // ✅ UPDATE UI STATE (CRITICAL FIX)
+      setStudent({
+        studentId: student_id,
+        studentName: student_id, // or fetch name if needed
+      });
+
+      setScreen(SCREENS.DASHBOARD);
     }
-  }, []);
+  }, [window.location.search]);
 
   function handleAuth(studentInfo) {
     setStudent(studentInfo);
@@ -372,7 +429,7 @@ export default function App() {
       wrong_answers: chapterMetrics.wrong_answers,
       questions_attempted: chapterMetrics.questions_attempted,
 
-      total_questions:chapterMetrics.questions_attempted, // 🔥 update if needed
+      total_questions: chapterMetrics.questions_attempted, // 🔥 update if needed
 
       retry_count: chapterMetrics.retry_count,
       hints_used: chapterMetrics.hints_used,
@@ -380,29 +437,28 @@ export default function App() {
 
       time_spent_seconds: Math.round(chapterMetrics.time_spent_seconds),
 
-      topic_completion_ratio: Number((completed.size / 5).toFixed(2)), 
+      topic_completion_ratio: Number((completed.size / 5).toFixed(2)),
     };
     console.log("FINAL PAYLOAD:", payload);
     try {
-      const res = await fetch(
+      const res = await axios.post(
         "https://kaushik-dev.online/api/recommend/",
+        payload,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload),
         }
       );
 
-      const data = await res.json();
+      console.log("✅ Recommendation:", res.data);
 
-      alert(data.recommendation?.reason || "Recommendation received");
+      setRecommendation(res.data); // 🔥 IMPORTANT
 
     } catch (err) {
-      console.error("API Error", err);
-      localStorage.setItem("pendingPayload", JSON.stringify(payload));
+      console.error("❌ API Error:", err);
+      alert("Failed to fetch recommendation");
     }
   }
 
@@ -466,6 +522,7 @@ export default function App() {
         <SubtopicDashboard
           studentId={student.studentId}
           onSelect={handleSelectSubtopic}
+          recommendation={recommendation}
         />
       </>
     );
