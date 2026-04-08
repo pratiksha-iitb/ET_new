@@ -1,11 +1,13 @@
 
 // import { useState, useEffect } from "react";
+// import axios from "axios";
 
 // import AuthPage from "./pages/AuthPage";
 // import SubtopicDashboard from "./pages/SubtopicDashboard";
 // import AssessmentPage from "./pages/AssessmentPage";
 // import ProfilePage from "./pages/ProfilePage";
 // import ResultPage from "./pages/ResultPage";
+
 // import ReadingPage1 from "./pages/ReadingPage1";
 // import ReadingPage2 from "./pages/ReadingPage2";
 // import ReadingPage3 from "./pages/ReadingPage3";
@@ -33,16 +35,17 @@
 //   DASHBOARD: "dashboard",
 //   READING: "reading",
 //   ASSESSMENT: "assessment",
-//   PROFILE: "profile", // ✅ added
+//   PROFILE: "profile",
 //   RESULT: "result",
 // };
 
 // export default function App() {
-//   const [student, setStudent] = useState(() => {
-//     const id = sessionStorage.getItem("its_student_id");
-//     const name = sessionStorage.getItem("its_student_name");
-//     return id ? { studentId: id, studentName: name } : null;
-//   });
+//   // const [student, setStudent] = useState(() => {
+//   //   const id = sessionStorage.getItem("its_student_id");
+//   //   const name = sessionStorage.getItem("its_student_name");
+//   //   return id ? { studentId: id, studentName: name } : null;
+//   // });
+//   const [student, setStudent] = useState(null);
 
 //   const [screen, setScreen] = useState(
 //     student ? SCREENS.DASHBOARD : SCREENS.AUTH
@@ -51,10 +54,89 @@
 //   const [completed, setCompleted] = useState(new Set());
 //   const [sessionData, setSessionData] = useState(null);
 //   const [resultData, setResultData] = useState(null);
+//   const [recommendation, setRecommendation] = useState(null);
 
+//   // 🔥 NEW: Chapter metrics
+//   const [chapterMetrics, setChapterMetrics] = useState({
+//     correct_answers: 0,
+//     wrong_answers: 0,
+//     questions_attempted: 0,
+//     retry_count: 0,
+//     hints_used: 0,
+//     time_spent_seconds: 0,
+//   });
+
+//   // 🔥 URL PARAM EXTRACTION (MERGE)
+//   // useEffect(() => {
+//   //   retryPendingPayload();
+
+//   //   const params = new URLSearchParams(window.location.search);
+
+//   //   const token = params.get("token");
+//   //   const student_id = params.get("student_id");
+//   //   const session_id = params.get("session_id");
+
+//   //   if (token && student_id && session_id) {
+//   //     sessionStorage.setItem("token", token);
+//   //     sessionStorage.setItem("student_id", student_id);
+//   //     sessionStorage.setItem("session_id", session_id);
+//   //   }
+//   // }, []);
 //   useEffect(() => {
 //     retryPendingPayload();
-//   }, []);
+
+//     const params = new URLSearchParams(window.location.search);
+
+//     const token = params.get("token");
+//     const student_id = params.get("student_id");
+//     const session_id = params.get("session_id");
+
+//     if (token && student_id && session_id) {
+//       console.log("🔥 Merge login detected");
+
+//       const currentStudent = sessionStorage.getItem("student_id");
+
+//       // 🚨 IF NEW STUDENT → RESET EVERYTHING
+//       if (currentStudent !== student_id) {
+//         console.log("🔄 Switching student session");
+
+//         // Clear old session
+//         sessionStorage.clear();
+
+//         // Clear app state storage
+//         localStorage.removeItem("its_resume");
+//         localStorage.removeItem("pendingPayload");
+
+//         // Reset React state
+//         setCompleted(new Set());
+//         setActiveSubtopic(null);
+//         setSessionData(null);
+//         setResultData(null);
+//         setRecommendation(null);
+//         setChapterMetrics({
+//           correct_answers: 0,
+//           wrong_answers: 0,
+//           questions_attempted: 0,
+//           retry_count: 0,
+//           hints_used: 0,
+//           time_spent_seconds: 0,
+//         });
+//       }
+
+//       // ✅ SET NEW SESSION
+//       sessionStorage.setItem("token", token);
+//       sessionStorage.setItem("student_id", student_id);
+//       sessionStorage.setItem("session_id", session_id);
+
+//       // ✅ UPDATE UI STATE (CRITICAL FIX)
+//       setStudent({
+//         studentId: student_id,
+//         studentName: student_id, // or fetch name if needed
+//       });
+
+//       setScreen(SCREENS.DASHBOARD);
+//     }
+//   }, [window.location.search]);
 
 //   function handleAuth(studentInfo) {
 //     setStudent(studentInfo);
@@ -62,13 +144,67 @@
 //   }
 
 //   function handleLogout() {
-//     sessionStorage.removeItem("its_student_id");
-//     sessionStorage.removeItem("its_student_name");
+//     sessionStorage.clear();
 //     setStudent(null);
 //     setScreen(SCREENS.AUTH);
 //     setCompleted(new Set());
 //     setActiveSubtopic(null);
 //     setSessionData(null);
+//   }
+//   async function handleExitCourse() {
+//     const confirmExit = window.confirm("Exit full course?");
+
+//     if (!confirmExit) return;
+
+//     const token = sessionStorage.getItem("token");
+
+//     const payload = {
+//       student_id: sessionStorage.getItem("student_id"),
+//       session_id: sessionStorage.getItem("session_id"),
+//       chapter_id: "grade8_exponents_and_powers",
+
+//       timestamp: new Date().toISOString(),
+//       session_status: "exited_midway",
+
+//       correct_answers: chapterMetrics.correct_answers,
+//       wrong_answers: chapterMetrics.wrong_answers,
+//       questions_attempted: chapterMetrics.questions_attempted,
+
+//       total_questions: 60,
+//       retry_count: chapterMetrics.retry_count,
+//       hints_used: chapterMetrics.hints_used,
+//       total_hints_embedded: 20,
+
+//       time_spent_seconds: Math.max(60, Math.round(chapterMetrics.time_spent_seconds)),
+
+//       topic_completion_ratio: completed.size / 5,
+//     };
+
+//     console.log("EXIT COURSE PAYLOAD:", payload);
+
+//     try {
+//       const res = await fetch("https://kaushik-dev.online/api/recommend/", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//         body: JSON.stringify(payload),
+//       });
+
+//       const data = await res.json();
+
+//       setRecommendation(data);
+
+//       alert(data.recommendation.reason);
+
+//       // 👉 REDIRECT BACK TO MERGE PLATFORM
+//       window.location.href = "https://kaushik-dev.online/dashboard"; // or given URL
+
+//     } catch (err) {
+//       console.error(err);
+//       alert("Failed to send session");
+//     }
 //   }
 
 //   function handleSelectSubtopic(id) {
@@ -84,22 +220,27 @@
 //     const sd = createSessionData({
 //       studentId: student.studentId,
 //       sessionId,
-//       subtopicIndex: activeSubtopic
+//       subtopicIndex: activeSubtopic,
 //     });
 
 //     setSessionData(sd);
 //     setScreen(SCREENS.ASSESSMENT);
-//     setScreen(SCREENS.ASSESSMENT);
 //   }
 
+//   // 🔥 UPDATED: aggregate + no API call here
 //   async function handleAssessmentComplete(finalMetrics) {
-//     if (sessionData) {
-//       await dispatchPayload(sessionData, finalMetrics, "completed");
-//     }
+//     // aggregate into chapter
+//     setChapterMetrics(prev => ({
+//       correct_answers: prev.correct_answers + finalMetrics.correct_answers,
+//       wrong_answers: prev.wrong_answers + finalMetrics.wrong_answers,
+//       questions_attempted: prev.questions_attempted + finalMetrics.questions_attempted,
+//       retry_count: prev.retry_count + finalMetrics.retry_count,
+//       hints_used: prev.hints_used + finalMetrics.hints_used,
+//       time_spent_seconds: prev.time_spent_seconds + finalMetrics.time_spent_seconds,
+//     }));
 
-//     setResultData(finalMetrics); // 🔥 store result
-
-//     setScreen(SCREENS.RESULT);   // 🔥 go to result screen
+//     setResultData(finalMetrics);
+//     setScreen(SCREENS.RESULT);
 //   }
 
 //   function handleAssessmentExit() {
@@ -108,11 +249,67 @@
 //     setScreen(SCREENS.DASHBOARD);
 //   }
 
-//   // ── NAVBAR ─────────────────────────────────────────
+//   // 🔥 FINAL API CALL (ONLY ONCE)
+//   async function sendFinalPayload() {
+//     const token = sessionStorage.getItem("token");
+//     const student_id = sessionStorage.getItem("student_id");
+//     const session_id = sessionStorage.getItem("session_id");
+
+//     const payload = {
+//       student_id,
+//       session_id,
+//       chapter_id: "grade8_exponents_and_powers",
+
+//       timestamp: new Date().toISOString(),
+//       session_status: "completed",
+
+//       correct_answers: chapterMetrics.correct_answers,
+//       wrong_answers: chapterMetrics.wrong_answers,
+//       questions_attempted: chapterMetrics.questions_attempted,
+
+//       total_questions: chapterMetrics.questions_attempted, // 🔥 update if needed
+
+//       retry_count: chapterMetrics.retry_count,
+//       hints_used: chapterMetrics.hints_used,
+//       total_hints_embedded: chapterMetrics.questions_attempted,
+
+//       time_spent_seconds: Math.round(chapterMetrics.time_spent_seconds),
+
+//       topic_completion_ratio: Number((completed.size / 5).toFixed(2)),
+//     };
+//     console.log("FINAL PAYLOAD:", payload);
+//     try {
+//       const res = await axios.post(
+//         "https://kaushik-dev.online/api/recommend/",
+//         payload,
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//       console.log("✅ Recommendation:", res.data);
+
+//       setRecommendation(res.data); // 🔥 IMPORTANT
+
+//     } catch (err) {
+//       console.error("❌ API Error:", err);
+//       alert("Failed to fetch recommendation");
+//     }
+//   }
+
+//   // 🔥 TRIGGER WHEN ALL SUBTOPICS COMPLETE
+//   useEffect(() => {
+//     if (completed.size === 5) {
+//       sendFinalPayload();
+//     }
+//   }, [completed]);
+
+//   // ── NAV ─────────────────
 //   const Nav = () => (
 //     <div className="flex justify-between items-center px-6 py-3 bg-white/80 backdrop-blur-md border-b border-blue-100 sticky top-0 z-30 shadow-sm">
-
-//       {/* LEFT TITLE */}
 //       <span className="font-bold text-blue-800">
 //         Power Play 🚀
 //         <span className="text-xs text-gray-400 ml-2 font-normal">
@@ -120,30 +317,31 @@
 //         </span>
 //       </span>
 
-//       {/* RIGHT BUTTONS */}
 //       <div className="flex items-center gap-3">
-
-//         {/* PROFILE */}
 //         <button
 //           onClick={() => setScreen(SCREENS.PROFILE)}
-//           className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow hover:shadow-md transition"
+//           className="bg-white px-4 py-2 rounded-xl shadow"
 //         >
 //           👤 {student?.studentName}
 //         </button>
 
-//         {/* LOGOUT */}
-//         <button
+//         {/* <button
 //           onClick={handleLogout}
-//           className="text-xs text-red-500 hover:text-red-700 border border-red-200 px-3 py-2 rounded-xl bg-white shadow hover:shadow-md transition"
+//           className="text-xs text-red-500 border px-3 py-2 rounded-xl bg-white"
 //         >
 //           Logout
+//         </button> */}
+//         <button
+//           onClick={handleExitCourse}
+//           className="bg-red-500 text-white px-4 py-2 rounded-lg"
+//         >
+//           Exit Course
 //         </button>
-
 //       </div>
 //     </div>
 //   );
 
-//   // ── SCREENS ────────────────────────────────────────
+//   // ── SCREENS ─────────────────
 
 //   if (screen === SCREENS.AUTH) {
 //     return <AuthPage onAuth={handleAuth} />;
@@ -168,6 +366,7 @@
 //         <SubtopicDashboard
 //           studentId={student.studentId}
 //           onSelect={handleSelectSubtopic}
+//           recommendation={recommendation}
 //         />
 //       </>
 //     );
@@ -196,6 +395,7 @@
 //       </>
 //     );
 //   }
+
 //   if (screen === SCREENS.RESULT && resultData) {
 //     return (
 //       <>
@@ -217,6 +417,9 @@
 //   return null;
 // }
 
+
+
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -235,7 +438,6 @@ import ReadingPage5 from "./pages/ReadingPage5";
 import {
   generateSessionId,
   createSessionData,
-  dispatchPayload,
   retryPendingPayload,
   CHAPTER_METADATA,
 } from "./utils/sessionManager";
@@ -258,23 +460,17 @@ const SCREENS = {
 };
 
 export default function App() {
-  // const [student, setStudent] = useState(() => {
-  //   const id = sessionStorage.getItem("its_student_id");
-  //   const name = sessionStorage.getItem("its_student_name");
-  //   return id ? { studentId: id, studentName: name } : null;
-  // });
   const [student, setStudent] = useState(null);
-
-  const [screen, setScreen] = useState(
-    student ? SCREENS.DASHBOARD : SCREENS.AUTH
-  );
+  const [screen, setScreen] = useState(SCREENS.AUTH);
   const [activeSubtopic, setActiveSubtopic] = useState(null);
   const [completed, setCompleted] = useState(new Set());
   const [sessionData, setSessionData] = useState(null);
   const [resultData, setResultData] = useState(null);
   const [recommendation, setRecommendation] = useState(null);
 
-  // 🔥 NEW: Chapter metrics
+  // 🔥 NEW
+  const [showRecommendation, setShowRecommendation] = useState(false);
+
   const [chapterMetrics, setChapterMetrics] = useState({
     correct_answers: 0,
     wrong_answers: 0,
@@ -284,22 +480,7 @@ export default function App() {
     time_spent_seconds: 0,
   });
 
-  // 🔥 URL PARAM EXTRACTION (MERGE)
-  // useEffect(() => {
-  //   retryPendingPayload();
-
-  //   const params = new URLSearchParams(window.location.search);
-
-  //   const token = params.get("token");
-  //   const student_id = params.get("student_id");
-  //   const session_id = params.get("session_id");
-
-  //   if (token && student_id && session_id) {
-  //     sessionStorage.setItem("token", token);
-  //     sessionStorage.setItem("student_id", student_id);
-  //     sessionStorage.setItem("session_id", session_id);
-  //   }
-  // }, []);
+  // 🔥 MERGE LOGIN HANDLING
   useEffect(() => {
     retryPendingPayload();
 
@@ -314,23 +495,20 @@ export default function App() {
 
       const currentStudent = sessionStorage.getItem("student_id");
 
-      // 🚨 IF NEW STUDENT → RESET EVERYTHING
       if (currentStudent !== student_id) {
         console.log("🔄 Switching student session");
 
-        // Clear old session
         sessionStorage.clear();
-
-        // Clear app state storage
         localStorage.removeItem("its_resume");
         localStorage.removeItem("pendingPayload");
 
-        // Reset React state
         setCompleted(new Set());
         setActiveSubtopic(null);
         setSessionData(null);
         setResultData(null);
         setRecommendation(null);
+        setShowRecommendation(false);
+
         setChapterMetrics({
           correct_answers: 0,
           wrong_answers: 0,
@@ -341,15 +519,13 @@ export default function App() {
         });
       }
 
-      // ✅ SET NEW SESSION
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("student_id", student_id);
       sessionStorage.setItem("session_id", session_id);
 
-      // ✅ UPDATE UI STATE (CRITICAL FIX)
       setStudent({
         studentId: student_id,
-        studentName: student_id, // or fetch name if needed
+        studentName: student_id,
       });
 
       setScreen(SCREENS.DASHBOARD);
@@ -369,9 +545,10 @@ export default function App() {
     setActiveSubtopic(null);
     setSessionData(null);
   }
+
+  // 🔥 EXIT COURSE (FIXED)
   async function handleExitCourse() {
     const confirmExit = window.confirm("Exit full course?");
-
     if (!confirmExit) return;
 
     const token = sessionStorage.getItem("token");
@@ -391,9 +568,12 @@ export default function App() {
       total_questions: 60,
       retry_count: chapterMetrics.retry_count,
       hints_used: chapterMetrics.hints_used,
-      total_hints_embedded: 20,
+      total_hints_embedded: 60,
 
-      time_spent_seconds: Math.max(60, Math.round(chapterMetrics.time_spent_seconds)),
+      time_spent_seconds: Math.max(
+        60,
+        Math.round(chapterMetrics.time_spent_seconds)
+      ),
 
       topic_completion_ratio: completed.size / 5,
     };
@@ -413,11 +593,7 @@ export default function App() {
       const data = await res.json();
 
       setRecommendation(data);
-
-      alert(data.recommendation.reason);
-
-      // 👉 REDIRECT BACK TO MERGE PLATFORM
-      window.location.href = "https://kaushik-dev.online/dashboard"; // or given URL
+      setShowRecommendation(true); // 🔥 SHOW UI
 
     } catch (err) {
       console.error(err);
@@ -431,8 +607,6 @@ export default function App() {
   }
 
   function handleStartAssessment() {
-    localStorage.removeItem(`session_${student.studentId}_${activeSubtopic}`);
-
     const sessionId = generateSessionId(student.studentId);
 
     const sd = createSessionData({
@@ -445,16 +619,16 @@ export default function App() {
     setScreen(SCREENS.ASSESSMENT);
   }
 
-  // 🔥 UPDATED: aggregate + no API call here
   async function handleAssessmentComplete(finalMetrics) {
-    // aggregate into chapter
     setChapterMetrics(prev => ({
       correct_answers: prev.correct_answers + finalMetrics.correct_answers,
       wrong_answers: prev.wrong_answers + finalMetrics.wrong_answers,
-      questions_attempted: prev.questions_attempted + finalMetrics.questions_attempted,
+      questions_attempted:
+        prev.questions_attempted + finalMetrics.questions_attempted,
       retry_count: prev.retry_count + finalMetrics.retry_count,
       hints_used: prev.hints_used + finalMetrics.hints_used,
-      time_spent_seconds: prev.time_spent_seconds + finalMetrics.time_spent_seconds,
+      time_spent_seconds:
+        prev.time_spent_seconds + finalMetrics.time_spent_seconds,
     }));
 
     setResultData(finalMetrics);
@@ -467,7 +641,6 @@ export default function App() {
     setScreen(SCREENS.DASHBOARD);
   }
 
-  // 🔥 FINAL API CALL (ONLY ONCE)
   async function sendFinalPayload() {
     const token = sessionStorage.getItem("token");
     const student_id = sessionStorage.getItem("student_id");
@@ -485,8 +658,7 @@ export default function App() {
       wrong_answers: chapterMetrics.wrong_answers,
       questions_attempted: chapterMetrics.questions_attempted,
 
-      total_questions: chapterMetrics.questions_attempted, // 🔥 update if needed
-
+      total_questions: chapterMetrics.questions_attempted,
       retry_count: chapterMetrics.retry_count,
       hints_used: chapterMetrics.hints_used,
       total_hints_embedded: chapterMetrics.questions_attempted,
@@ -495,7 +667,9 @@ export default function App() {
 
       topic_completion_ratio: Number((completed.size / 5).toFixed(2)),
     };
+
     console.log("FINAL PAYLOAD:", payload);
+
     try {
       const res = await axios.post(
         "https://kaushik-dev.online/api/recommend/",
@@ -508,24 +682,20 @@ export default function App() {
         }
       );
 
-      console.log("✅ Recommendation:", res.data);
-
-      setRecommendation(res.data); // 🔥 IMPORTANT
+      setRecommendation(res.data);
+      setShowRecommendation(true); // 🔥 SHOW UI
 
     } catch (err) {
       console.error("❌ API Error:", err);
-      alert("Failed to fetch recommendation");
     }
   }
 
-  // 🔥 TRIGGER WHEN ALL SUBTOPICS COMPLETE
   useEffect(() => {
     if (completed.size === 5) {
       sendFinalPayload();
     }
   }, [completed]);
 
-  // ── NAV ─────────────────
   const Nav = () => (
     <div className="flex justify-between items-center px-6 py-3 bg-white/80 backdrop-blur-md border-b border-blue-100 sticky top-0 z-30 shadow-sm">
       <span className="font-bold text-blue-800">
@@ -543,12 +713,6 @@ export default function App() {
           👤 {student?.studentName}
         </button>
 
-        {/* <button
-          onClick={handleLogout}
-          className="text-xs text-red-500 border px-3 py-2 rounded-xl bg-white"
-        >
-          Logout
-        </button> */}
         <button
           onClick={handleExitCourse}
           className="bg-red-500 text-white px-4 py-2 rounded-lg"
@@ -559,28 +723,54 @@ export default function App() {
     </div>
   );
 
-  // ── SCREENS ─────────────────
-
-  if (screen === SCREENS.AUTH) {
-    return <AuthPage onAuth={handleAuth} />;
-  }
-
-  if (screen === SCREENS.PROFILE) {
-    return (
-      <>
-        <Nav />
-        <ProfilePage
-          studentId={student?.studentId}
-          onBack={() => setScreen(SCREENS.DASHBOARD)}
-        />
-      </>
-    );
-  }
+  if (screen === SCREENS.AUTH) return <AuthPage onAuth={handleAuth} />;
 
   if (screen === SCREENS.DASHBOARD) {
     return (
       <>
         <Nav />
+
+        {/* 🔥 RECOMMENDATION CARD (TOP) */}
+        {recommendation && showRecommendation && (
+          <div className="max-w-4xl mx-auto mt-6 p-6 rounded-2xl shadow bg-blue-50 border border-blue-200">
+            <h2 className="text-xl font-bold mb-2">
+              🎯 Recommendation
+            </h2>
+
+            <p><b>State:</b> {recommendation.learning_state}</p>
+            <p><b>Performance:</b> {recommendation.performance_score}</p>
+
+            <p className="mt-2">
+              💡 {recommendation.recommendation?.reason}
+            </p>
+
+            <ul className="mt-2 list-disc pl-5">
+              {recommendation.recommendation?.next_steps?.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
+            </ul>
+
+            {recommendation.recommendation?.prerequisite_url && (
+              <a
+                href={recommendation.recommendation.prerequisite_url}
+                className="inline-block mt-3 bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Go to prerequisite
+              </a>
+            )}
+
+            <button
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+              onClick={() =>
+                (window.location.href =
+                  "https://kaushik-dev.online/dashboard")
+              }
+            >
+              Return to Platform
+            </button>
+          </div>
+        )}
+
         <SubtopicDashboard
           studentId={student.studentId}
           onSelect={handleSelectSubtopic}
@@ -627,6 +817,18 @@ export default function App() {
             setResultData(null);
             setScreen(SCREENS.DASHBOARD);
           }}
+        />
+      </>
+    );
+  }
+
+  if (screen === SCREENS.PROFILE) {
+    return (
+      <>
+        <Nav />
+        <ProfilePage
+          studentId={student?.studentId}
+          onBack={() => setScreen(SCREENS.DASHBOARD)}
         />
       </>
     );
