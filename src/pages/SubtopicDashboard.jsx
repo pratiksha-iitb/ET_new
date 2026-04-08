@@ -201,7 +201,7 @@ const COLORS = [
   "from-pink-100 to-pink-50",
 ];
 
-export default function SubtopicDashboard({ onSelect, studentId ,  recommendation}) {
+export default function SubtopicDashboard({ onSelect, studentId, recommendation }) {
   const progress = loadProgress(studentId) || { subtopics: {} };
 
   // ✅ FIX: count based on SCORE > 35 (NOT just completed)
@@ -247,6 +247,111 @@ export default function SubtopicDashboard({ onSelect, studentId ,  recommendatio
             />
           </div>
         </div>
+
+
+        {/* ── COMPLETION MESSAGE ───────────────── */}
+        {/* — COMPLETION MESSAGE — */}
+        {completedCount === 5 && (
+          <>
+            <div className="bg-green-100 border border-green-400 p-5 rounded-2xl text-center shadow">
+              <p className="text-green-800 font-bold text-lg">
+                🎉 All subtopics completed! You're a pro!
+              </p>
+            </div>
+
+            {/* 🔥 RECOMMENDATION UI STARTS HERE */}
+            {/* 🔥 RECOMMENDATION UI STARTS HERE */}
+            {recommendation && (
+              <div className="max-w-3xl mx-auto mt-6 p-6 rounded-2xl shadow bg-white border border-blue-200">
+
+                <h2 className="text-xl font-bold text-blue-700 mb-3">
+                  🎯 Learning Recommendation
+                </h2>
+
+                {/* BASIC INFO */}
+                <div className="text-sm text-gray-800 space-y-1">
+                  <p><strong>Student ID:</strong> {recommendation.student_id}</p>
+                  <p><strong>Chapter:</strong> {recommendation.chapter_id}</p>
+                  <p>
+                    <strong>Learning State:</strong>{" "}
+                    <span className={`capitalize font-semibold ${recommendation.learning_state === "strong"
+                        ? "text-green-600"
+                        : "text-red-600"
+                      }`}>
+                      {recommendation.learning_state}
+                    </span>
+                  </p>
+
+                  <p><strong>Performance Score:</strong> {recommendation.performance_score?.toFixed(2)}</p>
+                  <p><strong>Confidence Score:</strong> {recommendation.confidence_score?.toFixed(2)}</p>
+                </div>
+
+                {/* DIAGNOSIS */}
+                <div className="mt-4 p-4 bg-gray-50 rounded-xl border text-sm">
+                  <h3 className="font-semibold text-gray-700 mb-2">📊 Diagnosis</h3>
+
+                  <p><strong>Accuracy:</strong> {recommendation.diagnosis?.accuracy}</p>
+                  <p><strong>Hint Dependency:</strong> {recommendation.diagnosis?.hint_dependency}</p>
+                  <p><strong>Retry Behavior:</strong> {recommendation.diagnosis?.retry_behavior}</p>
+                  <p><strong>Time Efficiency:</strong> {recommendation.diagnosis?.time_efficiency}</p>
+
+                  {/* HISTORY */}
+                  <div className="mt-3 text-gray-600">
+                    <p><strong>Past Attempts:</strong> {recommendation.diagnosis?.history?.past_attempts}</p>
+                    <p><strong>Average Performance:</strong> {recommendation.diagnosis?.history?.avg_performance ?? "N/A"}</p>
+                    <p><strong>Trend:</strong> {recommendation.diagnosis?.history?.trend}</p>
+                  </div>
+                </div>
+
+                {/* RECOMMENDATION */}
+                <div className="mt-5">
+                  <h3 className="font-semibold text-gray-800 mb-1">🚀 Recommendation</h3>
+
+                  <p>
+                    <strong>Type:</strong>{" "}
+                    <span className="capitalize">
+                      {recommendation.recommendation?.type}
+                    </span>
+                  </p>
+
+                  <p className="mt-2 font-medium text-gray-800">
+                    💡 {recommendation.recommendation?.reason}
+                  </p>
+
+                  {/* NEXT STEPS */}
+                  {recommendation.recommendation?.next_steps && (
+                    <ul className="mt-2 list-disc pl-5 text-sm text-gray-700">
+                      {recommendation.recommendation.next_steps.map((step, i) => (
+                        <li key={i}>{step}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* PREREQUISITE BUTTON */}
+                {recommendation.recommendation?.prerequisite_url && (
+                  <a
+                    href={recommendation.recommendation.prerequisite_url}
+                    className="inline-block mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                  >
+                    🔁 Go to Prerequisite Chapter
+                  </a>
+                )}
+
+                {/* CTA BUTTON */}
+                <button
+                  className="mt-5 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  onClick={() => window.location.href = "https://kaushik-dev.online/dashboard"}
+                >
+                  Continue Learning →
+                </button>
+
+              </div>
+            )}
+            {/* 🔥 RECOMMENDATION UI ENDS HERE */}
+            {/* 🔥 RECOMMENDATION UI ENDS HERE */}
+          </>
+        )}
 
         {/* ── SUBTOPIC CARDS ───────────────── */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -318,78 +423,6 @@ export default function SubtopicDashboard({ onSelect, studentId ,  recommendatio
           })}
         </div>
 
-        {/* ── COMPLETION MESSAGE ───────────────── */}
-        {/* — COMPLETION MESSAGE — */}
-        {completedCount === 5 && (
-          <>
-            <div className="bg-green-100 border border-green-400 p-5 rounded-2xl text-center shadow">
-              <p className="text-green-800 font-bold text-lg">
-                🎉 All subtopics completed! You're a pro!
-              </p>
-            </div>
-
-            {/* 🔥 RECOMMENDATION UI STARTS HERE */}
-            {recommendation && (
-              <div className="max-w-3xl mx-auto mt-6 p-6 rounded-2xl shadow bg-white border border-blue-200">
-
-                <h2 className="text-xl font-bold text-blue-700 mb-3">
-                  🎯 Learning Recommendation
-                </h2>
-
-                <p>
-                  <strong>Learning State:</strong>{" "}
-                  <span className="capitalize text-green-600 font-semibold">
-                    {recommendation.learning_state}
-                  </span>
-                </p>
-
-                <p>
-                  <strong>Performance Score:</strong>{" "}
-                  {recommendation.performance_score?.toFixed(2)}
-                </p>
-
-                <p>
-                  <strong>Confidence Score:</strong>{" "}
-                  {recommendation.confidence_score?.toFixed(2)}
-                </p>
-
-                {/* Diagnosis */}
-                <div className="mt-3 text-sm text-gray-700">
-                  <p><strong>Accuracy:</strong> {recommendation.diagnosis?.accuracy}</p>
-                  <p><strong>Hint Dependency:</strong> {recommendation.diagnosis?.hint_dependency}</p>
-                  <p><strong>Retry Behavior:</strong> {recommendation.diagnosis?.retry_behavior}</p>
-                  <p><strong>Time Efficiency:</strong> {recommendation.diagnosis?.time_efficiency}</p>
-                </div>
-
-                {/* Reason */}
-                <p className="mt-4 text-gray-800 font-medium">
-                  💡 {recommendation.recommendation.reason}
-                </p>
-
-                {/* Next Steps */}
-                {recommendation.recommendation.next_steps && (
-                  <ul className="mt-3 list-disc pl-5 text-sm text-gray-700">
-                    {recommendation.recommendation.next_steps.map((step, i) => (
-                      <li key={i}>{step}</li>
-                    ))}
-                  </ul>
-                )}
-
-                {/* Prerequisite */}
-                {recommendation.recommendation.prerequisite_url && (
-                  <a
-                    href={recommendation.recommendation.prerequisite_url}
-                    className="inline-block mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                  >
-                    🔁 Go to Prerequisite Chapter
-                  </a>
-                )}
-
-              </div>
-            )}
-            {/* 🔥 RECOMMENDATION UI ENDS HERE */}
-          </>
-        )}
 
       </div>
     </div>
